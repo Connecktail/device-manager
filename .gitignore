@@ -54,3 +54,4 @@ dkms.conf
 .vscode
 objects/*
 build/*
+glade/screen-app.glade~

@@ -1,16 +1,16 @@
 FLAGS= -Wall
 CC= gcc
-LIBS=-lpthread -lmsq-utils
+LIBS=-lpthread -lmsq-utils -ldb-utils `pkg-config --cflags --libs gtk+-3.0`
 OBJECTS=objects
 BUILD=build
 SRC=src
 INCLUDE=include
-OBJECTS_FILES= $(OBJECTS)/main.o $(OBJECTS)/scanner.o
+OBJECTS_FILES= $(OBJECTS)/main.o $(OBJECTS)/scanner.o $(OBJECTS)/screen.o
 
 all: $(BUILD)/main
 
 $(BUILD)/main: $(OBJECTS_FILES)
-	$(CC) $(FLAGS) -o $(BUILD)/main $^  $(LIBS)
+	$(CC) $(FLAGS) -o $(BUILD)/main $^  $(LIBS) -export-dynamic
 
 $(OBJECTS)/%.o: $(SRC)/%.c $(INCLUDE)/*.h
 	$(CC) $(FLAGS) -c $< -o $@ $(LIBS)
