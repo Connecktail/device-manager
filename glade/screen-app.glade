@@ -74,10 +74,14 @@
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">always</property>
+                    <property name="overlay-scrolling">False</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="vscroll-policy">natural</property>
                         <child>
                           <object class="GtkBox" id="orders-list">
                             <property name="visible">True</property>
