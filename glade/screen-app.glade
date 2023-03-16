@@ -4,8 +4,6 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkWindow" id="homepage">
     <property name="can-focus">False</property>
-    <property name="default-width">800</property>
-    <property name="default-height">480</property>
     <signal name="destroy" handler="close_app" swapped="no"/>
     <child>
       <object class="GtkBox">
@@ -74,7 +72,6 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="height-request">406</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
@@ -95,7 +92,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
@@ -113,7 +110,6 @@
             <child>
               <object class="GtkBox">
                 <property name="width-request">400</property>
-                <property name="height-request">431</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
@@ -136,7 +132,6 @@
                 </child>
                 <child>
                   <object class="GtkAspectFrame">
-                    <property name="height-request">406</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label-xalign">0</property>
@@ -169,7 +164,7 @@ Please select one in the left part</property>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
