@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <sys/mman.h>
 #include <db-utils/dbutils.h>
+#include "glade-utils.h"
 
 #define db_host "127.0.0.1"
 #define db_database "connecktail"

@@ -5,7 +5,7 @@ OBJECTS=objects
 BUILD=build
 SRC=src
 INCLUDE=include
-OBJECTS_FILES= $(OBJECTS)/main.o $(OBJECTS)/scanner.o $(OBJECTS)/screen.o
+OBJECTS_FILES= $(OBJECTS)/main.o $(OBJECTS)/scanner.o $(OBJECTS)/screen.o $(OBJECTS)/glade-utils.o
 
 all: $(BUILD)/main
 
