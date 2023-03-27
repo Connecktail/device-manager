@@ -23,7 +23,7 @@ void *display_screen(void *arg) {
     newact.sa_handler = signal_handler;
     sigemptyset(&newact.sa_mask);
     newact.sa_flags = 0;
-    sigaction(SIGUSR1, &newact, NULL);
+    sigaction(SIGUSR2, &newact, NULL);
 
     gtk_init(NULL, NULL);
 
