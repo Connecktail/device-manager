@@ -21,6 +21,7 @@ GtkWidget *make_order_item(order_t *order) {
 
     gtk_box_pack_start(order_item, GTK_WIDGET(order_label), TRUE, TRUE, 0);
     gtk_box_pack_start(order_item, GTK_WIDGET(order_button), TRUE, TRUE, 0);
+    gtk_widget_show_all(GTK_WIDGET(order_item));
 
     return GTK_WIDGET(order_item);
 }

@@ -1,6 +1,6 @@
 FLAGS= -Wall
 CC= gcc
-LIBS=-lpthread -lmsq-utils -ldb-utils `pkg-config --cflags --libs gtk+-3.0`
+LIBS=-lpthread -lmsq-utils -ldb-utils -lshm-utils `pkg-config --cflags --libs gtk+-3.0`
 OBJECTS=objects
 BUILD=build
 SRC=src
