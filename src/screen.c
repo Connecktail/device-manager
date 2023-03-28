@@ -73,7 +73,7 @@ void *display_screen(void *arg) {
 }
 
 void signal_handler() {
-    g_idle_add(update_screen, NULL);
+    g_idle_add_full(G_PRIORITY_HIGH_IDLE, update_screen, NULL, NULL);
 }
 
 gboolean update_screen() {
@@ -90,7 +90,8 @@ gboolean update_screen() {
     }
     
     gtk_widget_show_all(GTK_WIDGET(orders_list));
-    return TRUE;
+
+    return G_SOURCE_REMOVE;
 }
 
 void close_app() {
