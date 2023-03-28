@@ -4,6 +4,7 @@ PGconn *conn;
 order_t **orders;
 cocktail_t **cocktails;
 bottle_t **bottles;
+int length;
 
 GtkBuilder *builder;
 GdkScreen *gdk_screen;
@@ -17,8 +18,13 @@ GtkCssProvider *css_provider;
 
 void *display_screen(void *arg) {
 	conn = db_connect(db_host, db_database, db_user, db_password);
-    int length;
-    
+
+    struct sigaction newact;
+    newact.sa_handler = signal_handler;
+    sigemptyset(&newact.sa_mask);
+    newact.sa_flags = 0;
+    sigaction(SIGUSR2, &newact, NULL);
+
     gtk_init(NULL, NULL);
 
     builder = gtk_builder_new();
@@ -53,9 +59,7 @@ void *display_screen(void *arg) {
 
     css_provider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(css_provider, "./glade/screen-app.css", NULL);
-    gtk_style_context_add_provider_for_screen (gdk_screen,
-        GTK_STYLE_PROVIDER(css_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_screen (gdk_screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 
@@ -66,6 +70,28 @@ void *display_screen(void *arg) {
     gtk_main();
 
     return NULL;
+}
+
+void signal_handler() {
+    g_idle_add_full(G_PRIORITY_HIGH_IDLE, update_screen, NULL, NULL);
+}
+
+gboolean update_screen() {
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(orders_list));
+    for(iter = children; iter != NULL; iter = g_list_next(iter)) {
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    orders = get_orders(conn, &length);
+    for(int i = 0; i < length; i++) {
+        gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+    }
+    
+    gtk_widget_show_all(GTK_WIDGET(orders_list));
+
+    return G_SOURCE_REMOVE;
 }
 
 void close_app() {

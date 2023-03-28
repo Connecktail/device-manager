@@ -10,9 +10,13 @@ pthread_mutex_t mutex_condition = PTHREAD_MUTEX_INITIALIZER;
 
 float price;
 pthread_t th_scanner, th_screen;
+int shmid;
 
 int main()
 {
+    shmid = init_shared_memory();
+    change_device_handler_pid(getpid());
+
     pthread_cond_init(&scanner_condition, NULL);
     pthread_mutex_init(&mutex_condition, NULL);
 
