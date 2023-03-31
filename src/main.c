@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <msq-utils/message.h>
 
 #include "../include/scanner.h"
 #include "../include/screen.h"
@@ -9,6 +10,7 @@ pthread_cond_t scanner_condition = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex_condition = PTHREAD_MUTEX_INITIALIZER;
 
 float price;
+char barcode[MAX_LENGTH_BARCODE + 2];
 pthread_t th_scanner, th_screen;
 int shmid;
 
@@ -22,13 +24,6 @@ int main()
 
     pthread_create(&th_scanner, NULL, handle_scanner, NULL);
     pthread_create(&th_screen, NULL, display_screen, NULL);
-
-    sleep(5);
-
-    // Simulation of a click on the button
-    printf("Click on the button\n");
-    price = 1.5;
-    pthread_cond_signal(&scanner_condition);
 
     pthread_join(th_screen, NULL);
     pthread_join(th_scanner, NULL);
