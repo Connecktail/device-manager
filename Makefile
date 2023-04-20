@@ -5,11 +5,13 @@ OBJECTS=objects
 BUILD=build
 SRC=src
 INCLUDE=include
-OBJECTS_FILES= $(OBJECTS)/main.o $(OBJECTS)/scanner.o $(OBJECTS)/screen.o $(OBJECTS)/glade-utils.o
+
+OBJECTS_FILES= main.o scanner.o screen.o glade-utils.o gtk-signals-handlers.o
+OBJS=$(addprefix $(OBJECTS)/, $(OBJECTS_FILES))
 
 all: $(BUILD)/main
 
-$(BUILD)/main: $(OBJECTS_FILES)
+$(BUILD)/main: $(OBJS)
 	$(CC) $(FLAGS) -o $(BUILD)/main $^  $(LIBS) -export-dynamic
 
 $(OBJECTS)/%.o: $(SRC)/%.c $(INCLUDE)/*.h
