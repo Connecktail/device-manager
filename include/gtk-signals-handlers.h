@@ -2,6 +2,7 @@
 #define GTK_SIGNALS_HANDLERS_H
 
 #include <gtk-3.0/gtk/gtk.h>
+#include <db-utils/dbutils.h>
 
 /**
  * @brief Show the modal to scan a bottle

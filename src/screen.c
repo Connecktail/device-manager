@@ -11,14 +11,18 @@ cocktail_t **cocktails;
 bottle_t **bottles;
 int length;
 
+int add_cocktail_step = 0;
+cocktail_t *cocktail_added;
+
 GtkBuilder *builder;
 GdkScreen *gdk_screen;
 GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
-GtkWidget *stack;
+GtkWidget *stack, *add_cocktail_stack;
 GtkWidget *pHomepage, *pAdministration;
-GtkWidget *pScanBottleModal;
+GtkWidget *pScanBottleModal, *pAddCocktailModal;
+GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 
 GtkCssProvider *css_provider;
 
@@ -27,6 +31,7 @@ sem_t send_barcode_semaphore;
 void *display_screen(void *arg)
 {
     conn = db_connect(db_host, db_database, db_user, db_password);
+    cocktail_added = (cocktail_t *)malloc(sizeof(cocktail_t));
 
     sem_init(&send_barcode_semaphore, 0, 0);
 
@@ -43,9 +48,14 @@ void *display_screen(void *arg)
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     stack = GTK_WIDGET(gtk_builder_get_object(builder, "principal_stack"));
+    add_cocktail_stack = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_stack"));
     pHomepage = GTK_WIDGET(gtk_builder_get_object(builder, "homepage_box"));
     pAdministration = GTK_WIDGET(gtk_builder_get_object(builder, "administration_box"));
     pScanBottleModal = GTK_WIDGET(gtk_builder_get_object(builder, "scan_bottle_modal"));
+    pAddCocktailModal = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_modal"));
+    pCocktailInfos = GTK_WIDGET(gtk_builder_get_object(builder, "cocktail_infos"));
+    pBottlesSelection = GTK_WIDGET(gtk_builder_get_object(builder, "bottles_selection"));
+    pStepInfos = GTK_WIDGET(gtk_builder_get_object(builder, "step_infos"));
 
     orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
     cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
@@ -79,7 +89,6 @@ void *display_screen(void *arg)
     gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 
     gtk_builder_connect_signals(builder, NULL);
-    g_object_unref(builder);
 
     gtk_widget_show_all(window);
     gtk_main();
@@ -127,3 +136,4 @@ void go_to_homepage()
 {
     gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 }
+

@@ -1,37 +1,313 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkWindow" id="window">
-    <property name="can_focus">False</property>
-    <child type="titlebar">
-      <placeholder/>
+  <object class="GtkDialog" id="add_cocktail_modal">
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="type">popup</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window-position">center</property>
+    <property name="type-hint">dialog</property>
+    <property name="skip-taskbar-hint">True</property>
+    <property name="gravity">center</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Back</property>
+                <property name="width-request">99</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="hide_add_cocktail_modal" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Continue</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="continue_add_cocktail_modal" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="add_cocktail_stack">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkBox" id="cocktail_infos">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">9</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Please provide the name of the cocktail</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="cocktail_name">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="input-purpose">alpha</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Please provide the price of the cocktail</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="cocktail_price">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="input-purpose">number</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Please provide a description for the cocktail</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="cocktail_description">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">page0</property>
+                <property name="title" translatable="yes">page0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="bottles_selection">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">9</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Select and sort the bottles in the order of the preparation of the cocktail</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="bottles-list1">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="orders-list"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">page1</property>
+                <property name="title" translatable="yes">page1</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="step_infos">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">9</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Step N detail - Bottle n°X</property>
+                    <property name="justify">fill</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Please provide the quantity for this bottle</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="bottle_price3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="input-purpose">number</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Please provide a description of the step</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">page2</property>
+                <property name="title" translatable="yes">page2</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
     </child>
+    <style>
+      <class name="modal"/>
+    </style>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkStack" id="principal_stack">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkBox" id="homepage_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="header">
-                <property name="height_request">35</property>
+                <property name="height-request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">Administration</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_start">10</property>
-                    <property name="margin_top">7</property>
-                    <property name="margin_bottom">7</property>
+                    <property name="margin-left">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-top">7</property>
+                    <property name="margin-bottom">7</property>
                     <signal name="clicked" handler="go_to_admin" swapped="no"/>
                   </object>
                   <packing>
@@ -53,19 +329,19 @@
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="width_request">400</property>
+                    <property name="width-request">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="height_request">20</property>
+                        <property name="height-request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
                         <property name="label" translatable="yes">Orders list</property>
                         <style>
                           <class name="title"/>
@@ -80,19 +356,19 @@
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">always</property>
-                        <property name="overlay_scrolling">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="overlay-scrolling">False</property>
                         <child>
                           <object class="GtkViewport">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="vscroll_policy">natural</property>
+                            <property name="can-focus">False</property>
+                            <property name="vscroll-policy">natural</property>
                             <child>
                               <object class="GtkBox" id="orders-list">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <placeholder/>
@@ -129,16 +405,16 @@
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="width_request">400</property>
+                    <property name="width-request">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="height_request">20</property>
+                        <property name="height-request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
                         <property name="label" translatable="yes">Active order</property>
                         <style>
                           <class name="title"/>
@@ -153,13 +429,13 @@
                     <child>
                       <object class="GtkAspectFrame">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
+                        <property name="can-focus">False</property>
+                        <property name="label-xalign">0</property>
+                        <property name="shadow-type">none</property>
                         <child>
                           <object class="GtkAccelLabel">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">No active order
 Please select one in the left part</property>
                             <property name="justify">center</property>
@@ -198,45 +474,42 @@ Please select one in the left part</property>
         <child>
           <object class="GtkBox" id="administration_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkDialog" id="scan_bottle_modal">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
                 <property name="type">popup</property>
                 <property name="resizable">False</property>
                 <property name="modal">True</property>
-                <property name="window_position">center</property>
-                <property name="default_width">320</property>
-                <property name="default_height">240</property>
-                <property name="type_hint">dialog</property>
-                <property name="skip_taskbar_hint">True</property>
+                <property name="window-position">center</property>
+                <property name="default-width">320</property>
+                <property name="default-height">240</property>
+                <property name="type-hint">dialog</property>
+                <property name="skip-taskbar-hint">True</property>
                 <property name="gravity">center</property>
-                <child type="titlebar">
-                  <placeholder/>
-                </child>
                 <child internal-child="vbox">
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">2</property>
                     <child internal-child="action_area">
                       <object class="GtkButtonBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">134</property>
-                        <property name="margin_bottom">10</property>
-                        <property name="layout_style">spread</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-left">134</property>
+                        <property name="margin-bottom">10</property>
+                        <property name="layout-style">spread</property>
                         <child>
                           <object class="GtkButton">
                             <property name="label" translatable="yes">Cancel</property>
-                            <property name="width_request">99</property>
+                            <property name="width-request">99</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="margin_right">7</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-right">7</property>
                             <signal name="clicked" handler="hide_scan_bottle_modal" swapped="no"/>
                           </object>
                           <packing>
@@ -249,8 +522,8 @@ Please select one in the left part</property>
                           <object class="GtkButton">
                             <property name="label" translatable="yes">Validate</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <signal name="clicked" handler="get_bottle_price" object="bottle_price" swapped="no"/>
                             <signal name="clicked" handler="validate_barcode" object="bar_code" swapped="no"/>
                           </object>
@@ -270,13 +543,13 @@ Please select one in the left part</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">9</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Please scan the bar code of the bottle or enter the bar code</property>
                             <property name="justify">fill</property>
                             <property name="wrap">True</property>
@@ -290,11 +563,11 @@ Please select one in the left part</property>
                         <child>
                           <object class="GtkEntry" id="bar_code">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="has_focus">True</property>
-                            <property name="margin_left">10</property>
-                            <property name="margin_right">10</property>
-                            <property name="input_purpose">alpha</property>
+                            <property name="can-focus">True</property>
+                            <property name="has-focus">True</property>
+                            <property name="margin-left">10</property>
+                            <property name="margin-right">10</property>
+                            <property name="input-purpose">alpha</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -305,7 +578,7 @@ Please select one in the left part</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes">Please provide the price of the bottle</property>
                           </object>
                           <packing>
@@ -317,10 +590,10 @@ Please select one in the left part</property>
                         <child>
                           <object class="GtkEntry" id="bottle_price">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="margin_left">10</property>
-                            <property name="margin_right">10</property>
-                            <property name="input_purpose">number</property>
+                            <property name="can-focus">True</property>
+                            <property name="margin-left">10</property>
+                            <property name="margin-right">10</property>
+                            <property name="input-purpose">number</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -349,20 +622,20 @@ Please select one in the left part</property>
             </child>
             <child>
               <object class="GtkBox" id="header3">
-                <property name="height_request">35</property>
+                <property name="height-request">35</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">Back</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="halign">start</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_start">10</property>
-                    <property name="margin_top">7</property>
-                    <property name="margin_bottom">7</property>
+                    <property name="margin-left">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-top">7</property>
+                    <property name="margin-bottom">7</property>
                     <signal name="clicked" handler="go_to_homepage" swapped="no"/>
                   </object>
                   <packing>
@@ -384,19 +657,19 @@ Please select one in the left part</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="width_request">400</property>
+                    <property name="width-request">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="height_request">20</property>
+                        <property name="height-request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
                         <property name="label" translatable="yes">Your cocktails</property>
                         <style>
                           <class name="title"/>
@@ -411,19 +684,19 @@ Please select one in the left part</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">always</property>
-                        <property name="overlay_scrolling">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="overlay-scrolling">False</property>
                         <child>
                           <object class="GtkViewport">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="vscroll_policy">natural</property>
+                            <property name="can-focus">False</property>
+                            <property name="vscroll-policy">natural</property>
                             <child>
                               <object class="GtkBox" id="cocktails-list">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <placeholder/>
@@ -445,6 +718,20 @@ Please select one in the left part</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">Create a new cocktail</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <signal name="clicked" handler="show_add_cocktail_modal" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                     <style>
                       <class name="half-window"/>
                     </style>
@@ -457,16 +744,16 @@ Please select one in the left part</property>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="width_request">400</property>
+                    <property name="width-request">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="height_request">20</property>
+                        <property name="height-request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_top">5</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">5</property>
                         <property name="label" translatable="yes">Your bottles</property>
                         <style>
                           <class name="title"/>
@@ -481,19 +768,19 @@ Please select one in the left part</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">always</property>
-                        <property name="overlay_scrolling">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">always</property>
+                        <property name="overlay-scrolling">False</property>
                         <child>
                           <object class="GtkViewport">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="vscroll_policy">natural</property>
+                            <property name="can-focus">False</property>
+                            <property name="vscroll-policy">natural</property>
                             <child>
                               <object class="GtkBox" id="bottles-list">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <placeholder/>
@@ -519,8 +806,8 @@ Please select one in the left part</property>
                       <object class="GtkButton">
                         <property name="label" translatable="yes">Scan a new bottle</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <signal name="clicked" handler="show_scan_bottle_modal" swapped="no"/>
                       </object>
                       <packing>
