@@ -19,8 +19,9 @@ GdkScreen *gdk_screen;
 GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
-GtkWidget *stack, *add_cocktail_stack;
-GtkWidget *pHomepage, *pAdministration;
+GtkBox *bottles_selection_list;
+GtkWidget *stack ,*addCocktailStack;
+GtkWidget *pHomepage, *pAdministration, *pAddCocktail;
 GtkWidget *pScanBottleModal, *pAddCocktailModal;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 
@@ -48,9 +49,10 @@ void *display_screen(void *arg)
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     stack = GTK_WIDGET(gtk_builder_get_object(builder, "principal_stack"));
-    add_cocktail_stack = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_stack"));
+    addCocktailStack = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_stack"));
     pHomepage = GTK_WIDGET(gtk_builder_get_object(builder, "homepage_box"));
     pAdministration = GTK_WIDGET(gtk_builder_get_object(builder, "administration_box"));
+    pAddCocktail = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_box"));
     pScanBottleModal = GTK_WIDGET(gtk_builder_get_object(builder, "scan_bottle_modal"));
     pAddCocktailModal = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_modal"));
     pCocktailInfos = GTK_WIDGET(gtk_builder_get_object(builder, "cocktail_infos"));
@@ -60,8 +62,12 @@ void *display_screen(void *arg)
     orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
     cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
     bottles_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-list"));
+    bottles_selection_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-selection-list"));
 
     gdk_screen = gtk_widget_get_screen(window);
+
+    GtkEntry *pCocktailName1 = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name1"));
+    gtk_entry_set_text(pCocktailName1, "blablabal");
 
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
@@ -79,6 +85,7 @@ void *display_screen(void *arg)
     bottles = get_bottles(conn, &length);
     for (int i = 0; i < length; i++)
     {
+        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);        
         gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
     }
 
@@ -126,14 +133,5 @@ void close_app()
 {
     gtk_main_quit();
     pthread_exit(NULL);
-}
-
-void go_to_admin()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
-}
-void go_to_homepage()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 }
 

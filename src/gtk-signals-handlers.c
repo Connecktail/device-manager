@@ -6,15 +6,28 @@
 #include "../include/gtk-signals-handlers.h"
 
 extern GtkBuilder *builder;
-extern GtkWidget *add_cocktail_stack;
+
+extern GtkWidget *stack,  *addCocktailStack;
+extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail;
 extern pthread_cond_t scanner_condition;
 extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];
 extern sem_t send_barcode_semaphore;
+extern GtkBox *bottles_selection_list;
 extern GtkWidget *pScanBottleModal, *pAddCocktailModal;
 extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 extern int add_cocktail_step;
 extern cocktail_t *cocktail_added;
+
+
+void go_to_admin()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+}
+void go_to_homepage()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
+}
 
 void show_scan_bottle_modal()
 {
@@ -28,7 +41,8 @@ void hide_scan_bottle_modal()
 
 void show_add_cocktail_modal()
 {
-    gtk_widget_show(pAddCocktailModal);
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAddCocktail);
+    gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
     add_cocktail_step = 1;
 }
 
@@ -59,9 +73,26 @@ void get_bottle_price(GtkButton *button, gpointer user_data)
     sem_post(&send_barcode_semaphore);
 }
 
-void continue_add_cocktail_modal() {
+void back_add_cocktail()
+{
     switch(add_cocktail_step) {
         case 1:
+            gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+            break;
+        case 2:
+            gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
+            add_cocktail_step--;
+            break;
+        default:
+            break;
+    }
+}
+
+void next_add_cocktail() {
+    switch(add_cocktail_step) {
+        case 1:
+            gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pBottlesSelection);
+
             GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
             GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
             GtkEntry *pCocktailDesc = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_description"));
@@ -77,7 +108,13 @@ void continue_add_cocktail_modal() {
             strcpy(cocktail_added->description, cocktail_desc);
             cocktail_added->price = cocktail_price;
 
-            gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
+            add_cocktail_step++;      
+            break;
+        case 2:
+            GtkLabel *order_label = GTK_LABEL(gtk_label_new("jgioerjgjreiogjreio"));
+
+            gtk_box_pack_start(GTK_BOX(bottles_selection_list), GTK_WIDGET(order_label), FALSE, FALSE, 0);  
+
             break;
         default:
             break;

@@ -3,6 +3,7 @@
 
 #include <gtk-3.0/gtk/gtk.h>
 #include <db-utils/dbutils.h>
+#include "glade-utils.h"
 
 /**
  * @brief Show the modal to scan a bottle
