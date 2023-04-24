@@ -19,6 +19,8 @@ extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 extern int add_cocktail_step;
 extern cocktail_t *cocktail_added;
 
+extern step_data_t *bottle_data_list;
+extern int nb_bottles;
 
 void go_to_admin()
 {
@@ -108,15 +110,37 @@ void next_add_cocktail() {
             strcpy(cocktail_added->description, cocktail_desc);
             cocktail_added->price = cocktail_price;
 
-            add_cocktail_step++;      
-            break;
-        case 2:
+            for (int i = 0; i < nb_bottles; i++) {
+                printf("id: %lld, pos:%d, name:>%s<\n", *bottle_data_list[i].bottle->id, bottle_data_list[i].position, bottle_data_list[i].bottle->name);
+                // gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item_addcocktail(bottle_data_list[i])), TRUE, TRUE, 0);  
+            }
+
             GtkLabel *order_label = GTK_LABEL(gtk_label_new("jgioerjgjreiogjreio"));
 
             gtk_box_pack_start(GTK_BOX(bottles_selection_list), GTK_WIDGET(order_label), FALSE, FALSE, 0);  
-
+            add_cocktail_step++;      
+            break;
+        case 2:
+            
             break;
         default:
             break;
     }
+}
+
+void check_bottle_clicked(GtkButton *button, gpointer data) {
+    step_data_t *st = data;
+    // int *id = data;
+    printf("clicked\n");
+
+    printf("%lld\n", *st->bottle->id);
+
+    // GtkButton *up_button = GTK_BUTTON(gtk_button_new_with_label("↑"));
+    // GtkButton *down_button = GTK_BUTTON(gtk_button_new_with_label("↓"));
+
+    // gtk_box_pack_start(buttons_box, GTK_WIDGET(up_button), FALSE, FALSE, 0);
+    // gtk_box_pack_start(buttons_box, GTK_WIDGET(down_button), FALSE, FALSE, 0);
+
+    // gtk_box_pack_start(order_item, GTK_WIDGET(buttons_box), FALSE, FALSE, 0);
+
 }

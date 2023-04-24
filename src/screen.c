@@ -9,7 +9,8 @@ PGconn *conn;
 order_t **orders;
 cocktail_t **cocktails;
 bottle_t **bottles;
-int length;
+step_data_t *bottle_data_list;
+int length, nb_bottles;
 
 int add_cocktail_step = 0;
 cocktail_t *cocktail_added;
@@ -82,12 +83,22 @@ void *display_screen(void *arg)
             gtk_box_pack_start(cocktails_list, GTK_WIDGET(make_cocktail_item(cocktails[i])), TRUE, TRUE, 0);
         }
     }
-    bottles = get_bottles(conn, &length);
-    for (int i = 0; i < length; i++)
+    bottles = get_bottles(conn, &nb_bottles);
+    bottle_data_list = (step_data_t*)malloc(sizeof(step_data_t) * (nb_bottles));
+    for (int i = 0; i < nb_bottles; i++)
     {
-        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);        
         gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
+        // gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);  
+
+        printf("test\n");
+        bottle_data_list[i].bottle = bottles[i];
+        // bottle_data_list[i]->checked = 0;
+        // bottle_data_list[i]->position = 0;
+        printf("test\n");
+
+        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item_addcocktail(&bottle_data_list[i])), TRUE, TRUE, 0); 
     }
+
 
     css_provider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(css_provider, "./glade/screen-app.css", NULL);

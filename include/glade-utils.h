@@ -12,7 +12,16 @@
 #include <ctype.h>
 #include <sys/mman.h>
 #include <db-utils/dbutils.h>
+#include "gtk-signals-handlers.h"
+#include "screen.h"
 
+typedef struct
+{
+   bottle_t *bottle;
+   step_t *step;
+   int checked;
+   int position;
+} step_data_t;
 
 /**
  * @brief Get a Widget object from an order object
@@ -34,5 +43,8 @@ GtkWidget *make_cocktail_item(cocktail_t *cocktail);
  * @return GtkWidget* A pointer to the widget
 */
 GtkWidget *make_bottle_item(bottle_t *bottle);
+
+
+GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data);
 
 #endif
