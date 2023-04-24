@@ -19,6 +19,8 @@ GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkWidget *stack;
 GtkWidget *pHomepage, *pAdministration;
 GtkWidget *pScanBottleModal;
+GtkWidget *pPairModuleModal;
+GtkWidget *pPairModuleModalLabel;
 
 GtkCssProvider *css_provider;
 
@@ -46,6 +48,9 @@ void *display_screen(void *arg)
     pHomepage = GTK_WIDGET(gtk_builder_get_object(builder, "homepage_box"));
     pAdministration = GTK_WIDGET(gtk_builder_get_object(builder, "administration_box"));
     pScanBottleModal = GTK_WIDGET(gtk_builder_get_object(builder, "scan_bottle_modal"));
+    pPairModuleModal = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal"));
+
+    pPairModuleModalLabel = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal_label"));
 
     orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
     cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
