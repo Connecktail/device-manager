@@ -5,6 +5,7 @@
 
 #include "../include/scanner.h"
 #include "../include/screen.h"
+#include "../include/signal-handler.h"
 
 pthread_cond_t scanner_condition = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex_condition = PTHREAD_MUTEX_INITIALIZER;
@@ -16,6 +17,13 @@ int shmid;
 
 int main()
 {
+    struct sigaction newact;
+    newact.sa_handler = signal_handler_linux;
+    sigemptyset(&newact.sa_mask);
+    newact.sa_flags = 0;
+    sigaction(SIGUSR1, &newact, NULL);
+    sigaction(SIGALRM, &newact, NULL);
+
     shmid = init_shared_memory();
     change_device_handler_pid(getpid());
 
