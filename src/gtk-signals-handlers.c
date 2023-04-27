@@ -120,11 +120,6 @@ void next_add_cocktail() {
             //     gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item_addcocktail(&bottle_data_list[i])), FALSE, FALSE, 0);  
             // }
             add_cocktail_step++;   
-
-            
-    for(int i = 0; i < nb_bottles; i++) {
-        printf("id: %lld, pos:%d, name:>%s<\n", *bottle_data_list[i]->bottle->id, bottle_data_list[i]->position, bottle_data_list[i]->bottle->name);
-    }   
             break;
         case 2:
             
@@ -135,9 +130,10 @@ void next_add_cocktail() {
 }
 
 void check_bottle_clicked(GtkButton *button) {
-    step_data_t *st = g_object_get_data(G_OBJECT(button), "step_data");
-
     GtkBox *parent = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(button)));
+    GtkBox *bottle_item = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(parent)));
+
+    step_data_t *st = g_object_get_data(G_OBJECT(bottle_item), "step_data");
 
     if(st->checked == 1) {
         GList *children, *iter;
@@ -148,15 +144,12 @@ void check_bottle_clicked(GtkButton *button) {
             }
         }
         g_list_free(children);
-
-        GtkBox *bottle_item = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(parent)));
         
         gtk_box_reorder_child(bottles_selection_list, GTK_WIDGET(bottle_item), nb_step-1);
 
         step_data_t *current = bottle_data_list[st->position];
 
         for(int i = st->position; i < nb_step-1; i++) {
-            printf("i:%d\n", i);
             bottle_data_list[i] = bottle_data_list[i+1];
             bottle_data_list[i]->position = i;
         }
@@ -174,13 +167,15 @@ void check_bottle_clicked(GtkButton *button) {
 
         gtk_widget_set_name(GTK_WIDGET(buttons_box), "buttons_box");
 
+
+        g_signal_connect_data(GTK_WIDGET(up_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)1, NULL, 0);
+        g_signal_connect_data(GTK_WIDGET(down_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)-1, NULL, 0);
+
         gtk_box_pack_start(buttons_box, GTK_WIDGET(up_button), FALSE, FALSE, 0);
         gtk_box_pack_start(buttons_box, GTK_WIDGET(down_button), FALSE, FALSE, 0);
         gtk_box_pack_start(parent, GTK_WIDGET(buttons_box), FALSE, FALSE, 0); 
 
         gtk_box_reorder_child(parent, GTK_WIDGET(buttons_box), 0);
-
-        GtkBox *bottle_item = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(parent)));
 
         gtk_box_reorder_child(bottles_selection_list, GTK_WIDGET(bottle_item), nb_step);
 
@@ -203,8 +198,30 @@ void check_bottle_clicked(GtkButton *button) {
     for(int i = 0; i < nb_bottles; i++) {
         printf("id: %lld, pos:%d, che:%d, name:>%s<\n", *bottle_data_list[i]->bottle->id, bottle_data_list[i]->position, bottle_data_list[i]->checked, bottle_data_list[i]->bottle->name);
     }
+    printf("\n");
 
     gtk_widget_show_all(GTK_WIDGET(parent));
+}
+
+void control_button_bottle_clicked(GtkButton *button, gpointer b_data){
+    unsigned data = (unsigned)(uintptr_t)b_data;
+
+    GtkBox *parent = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(gtk_widget_get_parent(GTK_WIDGET(button)))));
+    GtkBox *bottle_item = GTK_BOX(gtk_widget_get_parent(GTK_WIDGET(parent)));
+
+    step_data_t *st = g_object_get_data(G_OBJECT(bottle_item), "step_data");
+
+    if((data == 1 && st->position > 0) || (data == -1 && st->position < nb_step-1)) {
+        gtk_box_reorder_child(bottles_selection_list, GTK_WIDGET(bottle_item), st->position - data);
+
+        step_data_t *current = bottle_data_list[st->position];
+
+        bottle_data_list[st->position] = bottle_data_list[st->position - data];
+        bottle_data_list[st->position-data] = current;
+
+        bottle_data_list[st->position]->position = st->position;
+        bottle_data_list[st->position-data]->position = st->position-data;
+    }
 }
 
 void show_pair_module_modal()

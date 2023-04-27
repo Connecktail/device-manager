@@ -40,12 +40,16 @@ GtkWidget *make_cocktail_item(cocktail_t *cocktail);
 
 /**
  * @brief Get a Widget object from a bottle object
- * @param cocktail A pointer to the bottle object
+ * @param bottle A pointer to the bottle object
  * @return GtkWidget* A pointer to the widget
 */
 GtkWidget *make_bottle_item(bottle_t *bottle);
 
-
+/**
+ * @brief Get a Widget object from a step_data object for the add cocktail modal
+ * @param step_data A pointer to the step_data object
+ * @return GtkWidget* A pointer to the widget
+*/
 GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data);
 
 #endif

@@ -70,29 +70,29 @@ GtkWidget *make_bottle_item(bottle_t *bottle) {
 }
 
 GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data) {
-    GtkBox *order_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
-    GtkLabel *order_label = GTK_LABEL(gtk_label_new(step_data->bottle->name));
+    GtkBox *bottle_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+    GtkLabel *bottle_label = GTK_LABEL(gtk_label_new(step_data->bottle->name));
 
-    gtk_label_set_xalign(order_label, 0);
+    gtk_label_set_xalign(bottle_label, 0);
 
     GtkStyleContext *context;
-    context = gtk_widget_get_style_context(GTK_WIDGET(order_item));
+    context = gtk_widget_get_style_context(GTK_WIDGET(bottle_item));
     gtk_style_context_add_class(context, "bottle-item");
 
-    gtk_box_pack_start(order_item, GTK_WIDGET(order_label), TRUE, TRUE, 0);
+    gtk_box_pack_start(bottle_item, GTK_WIDGET(bottle_label), TRUE, TRUE, 0);
 
     GtkBox *controls_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
 
     GtkWidget *check_bottle = gtk_check_button_new();
 
     step_data_t *data = step_data;
-    g_object_set_data(G_OBJECT(check_bottle), "step_data", data);
+    g_object_set_data(G_OBJECT(bottle_item), "step_data", data);
 
-    g_signal_connect_data(check_bottle, "clicked", G_CALLBACK(check_bottle_clicked), (gpointer)data, NULL, 0);
+    g_signal_connect_data(check_bottle, "clicked", G_CALLBACK(check_bottle_clicked), NULL, NULL, 0);
 
     gtk_widget_set_name(GTK_WIDGET(check_bottle), step_data->bottle->name);
     gtk_box_pack_start(controls_box, GTK_WIDGET(check_bottle), FALSE, FALSE, 0);
-    gtk_box_pack_start(order_item, GTK_WIDGET(controls_box), FALSE, FALSE, 0);
+    gtk_box_pack_start(bottle_item, GTK_WIDGET(controls_box), FALSE, FALSE, 0);
 
-    return GTK_WIDGET(order_item);
+    return GTK_WIDGET(bottle_item);
 }

@@ -37,9 +37,16 @@ void get_bottle_price(GtkButton *button, gpointer user_data);
 /**
  * @brief Function to handle check on the bottle list in the new cocktail modal
  * @param button  The button that triggered the event
- * @param data The data passed to the function
- * @note handler fo the button "Validate"
+ * @note handler for the checkbox on the bottle list
  */
 void check_bottle_clicked(GtkButton *button);
+
+/**
+ * @brief Function to handle check on the bottle list in the new cocktail modal
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handler for the button "▲" and "▼" on the bottle list
+ */
+void control_button_bottle_clicked(GtkButton *button, gpointer b_data);
 
 #endif
