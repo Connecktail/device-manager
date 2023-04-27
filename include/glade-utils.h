@@ -21,6 +21,7 @@ typedef struct
    step_t *step;
    int checked;
    int position;
+   GtkBox *bottle_item;
 } step_data_t;
 
 /**

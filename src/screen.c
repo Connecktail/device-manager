@@ -9,10 +9,11 @@ PGconn *conn;
 order_t **orders;
 cocktail_t **cocktails;
 bottle_t **bottles;
-step_data_t *bottle_data_list;
+step_data_t **bottle_data_list;
 int length, nb_bottles;
 
 int add_cocktail_step = 0;
+int nb_step = 0;
 cocktail_t *cocktail_added;
 
 GtkBuilder *builder;
@@ -25,6 +26,8 @@ GtkWidget *stack ,*addCocktailStack;
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail;
 GtkWidget *pScanBottleModal, *pAddCocktailModal;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
+GtkWidget *pPairModuleModal;
+GtkWidget *pPairModuleModalLabel;
 
 GtkCssProvider *css_provider;
 
@@ -59,6 +62,9 @@ void *display_screen(void *arg)
     pCocktailInfos = GTK_WIDGET(gtk_builder_get_object(builder, "cocktail_infos"));
     pBottlesSelection = GTK_WIDGET(gtk_builder_get_object(builder, "bottles_selection"));
     pStepInfos = GTK_WIDGET(gtk_builder_get_object(builder, "step_infos"));
+    pPairModuleModal = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal"));
+
+    pPairModuleModalLabel = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal_label"));
 
     orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
     cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
@@ -84,21 +90,19 @@ void *display_screen(void *arg)
         }
     }
     bottles = get_bottles(conn, &nb_bottles);
-    bottle_data_list = (step_data_t*)malloc(sizeof(step_data_t) * (nb_bottles));
+    bottle_data_list = (step_data_t**)malloc(sizeof(step_data_t*) * (nb_bottles));
     for (int i = 0; i < nb_bottles; i++)
     {
         gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
-        // gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);  
 
-        printf("test\n");
-        bottle_data_list[i].bottle = bottles[i];
-        // bottle_data_list[i]->checked = 0;
-        // bottle_data_list[i]->position = 0;
-        printf("test\n");
+        bottle_data_list[i] = (step_data_t*)malloc(sizeof(step_data_t));
+        bottle_data_list[i]->bottle = bottles[i];
+        bottle_data_list[i]->bottle_item = GTK_BOX(make_bottle_item_addcocktail(bottle_data_list[i]));
+        bottle_data_list[i]->checked = 0;
+        bottle_data_list[i]->position = i;
 
-        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item_addcocktail(&bottle_data_list[i])), TRUE, TRUE, 0); 
+        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(bottle_data_list[i]->bottle_item), TRUE, TRUE, 0); 
     }
-
 
     css_provider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(css_provider, "./glade/screen-app.css", NULL);

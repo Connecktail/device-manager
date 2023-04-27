@@ -13,6 +13,29 @@ box.order-item {
     border:  1px solid #000;
 }
 
+box.bottle-item {
+    margin: 10px;
+    padding: 10px;
+    background-color: rgb(201, 218, 247);
+    border:  1px solid #000;
+}
+
 .modal{
     border:  2px solid #000;
+}
+
+#buttons_box {
+    margin-right: 10px;
+}
+
+#buttons_box > button {
+    background: rgb(201, 218, 247);
+    color: rgb(239, 239, 239);
+    font: 15px black;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+#buttons_box > button:hover {
+    color: rgb(214, 214, 214);
 }

@@ -40,6 +40,6 @@ void get_bottle_price(GtkButton *button, gpointer user_data);
  * @param data The data passed to the function
  * @note handler fo the button "Validate"
  */
-void check_bottle_clicked(GtkButton *button, gpointer data);
+void check_bottle_clicked(GtkButton *button);
 
 #endif
