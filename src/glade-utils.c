@@ -1,6 +1,8 @@
 #include "../include/screen.h"
 
 extern PGconn *conn;
+extern GtkBuilder *builder;
+extern int nb_step;
 
 GtkWidget *make_order_item(order_t *order) {
     char *str = malloc(100);
@@ -95,4 +97,79 @@ GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data) {
     gtk_box_pack_start(bottle_item, GTK_WIDGET(controls_box), FALSE, FALSE, 0);
 
     return GTK_WIDGET(bottle_item);
+}
+
+GtkWidget *make_buttons_box() {
+    GtkBox *buttons_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
+
+    GtkButton *up_button = GTK_BUTTON(gtk_button_new_with_label("▲"));
+    GtkButton *down_button = GTK_BUTTON(gtk_button_new_with_label("▼"));
+
+    gtk_widget_set_name(GTK_WIDGET(buttons_box), "buttons_box");
+
+    g_signal_connect_data(GTK_WIDGET(up_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)1, NULL, 0);
+    g_signal_connect_data(GTK_WIDGET(down_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)-1, NULL, 0);
+
+    gtk_box_pack_start(buttons_box, GTK_WIDGET(up_button), FALSE, FALSE, 0);
+    gtk_box_pack_start(buttons_box, GTK_WIDGET(down_button), FALSE, FALSE, 0);
+
+    return GTK_WIDGET(buttons_box);
+}
+
+cocktail_t *get_cocktail_info() {
+    cocktail_t* cocktail = (cocktail_t *)malloc(sizeof(cocktail_t));
+
+    GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
+    GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
+    GtkEntry *pCocktailDesc = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_description"));
+    const char *cocktail_name = gtk_entry_get_text(pCocktailName);
+    const char *cocktail_price_txt = gtk_entry_get_text(pCocktailPrice);
+    const char *cocktail_desc = gtk_entry_get_text(pCocktailDesc);
+    if (strcmp(cocktail_price_txt, "") == 0)
+        cocktail_price_txt = "0";
+
+    float cocktail_price = atof(cocktail_price_txt);
+
+    strcpy(cocktail->name, cocktail_name);
+    strcpy(cocktail->description, cocktail_desc);
+    cocktail->price = cocktail_price;
+
+    return cocktail;
+}
+
+void update_step_info(step_data_t *step_data) {
+    GtkLabel *step_label = GTK_LABEL(gtk_builder_get_object(builder, "step_label"));
+    GtkEntry *step_quantity = GTK_ENTRY(gtk_builder_get_object(builder, "step_quantity"));
+    GtkEntry *step_description = GTK_ENTRY(gtk_builder_get_object(builder, "step_description"));
+
+    char *str = malloc(100);
+    sprintf(str, "Step %d/%d  -  Bottle : %s", step_data->position+1, nb_step, step_data->bottle->name);
+    gtk_label_set_text(step_label, str);
+
+    if(step_data->step_completed == 0) {
+        gtk_entry_set_text(step_quantity, "0,00");
+        gtk_entry_set_text(step_description, "");
+    } else {
+        char *quantity = malloc(100);
+        sprintf(quantity, "%.2f", step_data->step->quantity);
+        gtk_entry_set_text(step_quantity, quantity);
+        gtk_entry_set_text(step_description, step_data->step->description);
+    }
+}
+
+void save_step_info(step_data_t *step_data) {
+    GtkEntry *step_quantity = GTK_ENTRY(gtk_builder_get_object(builder, "step_quantity"));
+    GtkEntry *step_description = GTK_ENTRY(gtk_builder_get_object(builder, "step_description"));
+
+    const char *quantity = gtk_entry_get_text(step_quantity);
+    const char *description = gtk_entry_get_text(step_description);
+    float quantity_float = atof(quantity);
+
+    if(step_data->step_completed == 0) {
+        step_data->step = (step_t *)malloc(sizeof(step_t));
+    }
+    step_data->step->quantity = quantity_float;
+    strcpy(step_data->step->description, description);
+    step_data->step->bottle = step_data->bottle;
+    step_data->step_completed = 1;
 }

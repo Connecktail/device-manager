@@ -21,6 +21,7 @@ typedef struct
    step_t *step;
    int checked;
    int position;
+   int step_completed;
    GtkBox *bottle_item;
 } step_data_t;
 
@@ -46,10 +47,34 @@ GtkWidget *make_cocktail_item(cocktail_t *cocktail);
 GtkWidget *make_bottle_item(bottle_t *bottle);
 
 /**
- * @brief Get a Widget object from a step_data object for the add cocktail modal
+ * @brief Get a Widget object from a step_data object for the add cocktail view
  * @param step_data A pointer to the step_data object
  * @return GtkWidget* A pointer to the widget
 */
 GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data);
+
+/**
+ * @brief Get a Widget object that contains the controls buttons for the bottles list in the add cocktail view
+ * @return GtkWidget* A pointer to the widget
+*/
+GtkWidget *make_buttons_box();
+
+/**
+ * @brief Get cocktail info from the GtkEntry objects in the add cocktail view
+ * @return cocktail_t* A pointer to the cocktail object
+*/
+cocktail_t *get_cocktail_info();
+
+/**
+ * @brief Update the step detail on the add cocktail view with the step_data object
+ * @param step_data A pointer to the step_data object
+*/
+void update_step_info(step_data_t *step_data);
+
+/**
+ * @brief Save the step detail on the add cocktail view with the step_data object
+ * @param step_data A pointer to the step_data object
+*/
+void save_step_info(step_data_t *step_data);
 
 #endif
