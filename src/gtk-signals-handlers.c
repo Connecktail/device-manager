@@ -166,6 +166,8 @@ void next_add_cocktail() {
                 }
 
                 free(bottle_data_list);
+
+                update_cocktail_list();
                 go_to_admin();
             }
             break;

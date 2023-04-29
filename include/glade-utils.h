@@ -77,4 +77,9 @@ void update_step_info(step_data_t *step_data);
 */
 void save_step_info(step_data_t *step_data);
 
+/**
+ * @brief Update the cocktail list in the main view
+*/
+void update_cocktail_list();
+
 #endif

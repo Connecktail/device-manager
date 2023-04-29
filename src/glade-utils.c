@@ -173,3 +173,26 @@ void save_step_info(step_data_t *step_data) {
     step_data->step->bottle = step_data->bottle;
     step_data->step_completed = 1;
 }
+
+void update_cocktail_list() {
+    int length;
+    GtkBox *cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
+    cocktail_t **cocktails = get_cocktails(conn, &length);
+
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(cocktails_list));
+    for (iter = children; iter != NULL; iter = g_list_next(iter))
+    {
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    for (int i = 0; i < length; i++)
+    {
+        if (!cocktails[i]->personalized)
+        {
+            gtk_box_pack_start(cocktails_list, GTK_WIDGET(make_cocktail_item(cocktails[i])), TRUE, TRUE, 0);
+        }
+    }
+    gtk_widget_show_all(GTK_WIDGET(cocktails_list));
+}
