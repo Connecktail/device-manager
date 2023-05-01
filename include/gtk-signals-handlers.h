@@ -2,6 +2,8 @@
 #define GTK_SIGNALS_HANDLERS_H
 
 #include <gtk-3.0/gtk/gtk.h>
+#include <db-utils/dbutils.h>
+#include "glade-utils.h"
 
 /**
  * @brief Show the modal to scan a bottle
@@ -31,5 +33,20 @@ void validate_barcode(GtkButton *button, gpointer user_data);
  * @note handler fo the button "Validate"
  */
 void get_bottle_price(GtkButton *button, gpointer user_data);
+
+/**
+ * @brief Function to handle check on the bottle list in the new cocktail modal
+ * @param button  The button that triggered the event
+ * @note handler for the checkbox on the bottle list
+ */
+void check_bottle_clicked(GtkButton *button);
+
+/**
+ * @brief Function to handle check on the bottle list in the new cocktail modal
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handler for the button "▲" and "▼" on the bottle list
+ */
+void control_button_bottle_clicked(GtkButton *button, gpointer b_data);
 
 #endif
