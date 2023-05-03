@@ -60,7 +60,8 @@ void update_current_order() {
     gtk_widget_show_all(GTK_WIDGET(current_order_box));
 }
 
-GtkWidget *make_order_item(order_t *order) {
+GtkWidget *make_order_item(order_t *order)
+{
     char *str = malloc(100);
     sprintf(str, "Order n°%lld\n%d cocktail(s)", *order->id, order->nb_cocktails);
 
@@ -75,7 +76,7 @@ GtkWidget *make_order_item(order_t *order) {
 
     GtkStyleContext *context;
     context = gtk_widget_get_style_context(GTK_WIDGET(order_item));
-    gtk_style_context_add_class(context,"order-item");
+    gtk_style_context_add_class(context, "order-item");
 
     gtk_box_pack_start(order_item, GTK_WIDGET(order_label), TRUE, TRUE, 0);
     gtk_box_pack_start(order_item, GTK_WIDGET(order_button), TRUE, TRUE, 0);
@@ -84,7 +85,8 @@ GtkWidget *make_order_item(order_t *order) {
     return GTK_WIDGET(order_item);
 }
 
-GtkWidget *make_cocktail_item(cocktail_t *cocktail) {
+GtkWidget *make_cocktail_item(cocktail_t *cocktail)
+{
     char *str = malloc(100);
     sprintf(str, "%s\n%.2f€", cocktail->name, cocktail->price);
 
@@ -99,7 +101,7 @@ GtkWidget *make_cocktail_item(cocktail_t *cocktail) {
 
     GtkStyleContext *context;
     context = gtk_widget_get_style_context(GTK_WIDGET(order_item));
-    gtk_style_context_add_class(context,"order-item");
+    gtk_style_context_add_class(context, "order-item");
 
     gtk_box_pack_start(order_item, GTK_WIDGET(order_label), TRUE, TRUE, 0);
     gtk_box_pack_start(order_item, GTK_WIDGET(order_button), TRUE, TRUE, 0);
@@ -107,7 +109,8 @@ GtkWidget *make_cocktail_item(cocktail_t *cocktail) {
     return GTK_WIDGET(order_item);
 }
 
-GtkWidget *make_bottle_item(bottle_t *bottle) {
+GtkWidget *make_bottle_item(bottle_t *bottle)
+{
     GtkBox *order_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     GtkLabel *order_label = GTK_LABEL(gtk_label_new(bottle->name));
 
@@ -127,7 +130,8 @@ GtkWidget *make_bottle_item(bottle_t *bottle) {
     return GTK_WIDGET(order_item);
 }
 
-GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data) {
+GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data)
+{
     GtkBox *bottle_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
     GtkLabel *bottle_label = GTK_LABEL(gtk_label_new(step_data->bottle->name));
 
@@ -155,7 +159,8 @@ GtkWidget *make_bottle_item_addcocktail(step_data_t *step_data) {
     return GTK_WIDGET(bottle_item);
 }
 
-GtkWidget *make_buttons_box() {
+GtkWidget *make_buttons_box()
+{
     GtkBox *buttons_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
 
     GtkButton *up_button = GTK_BUTTON(gtk_button_new_with_label("▲"));
@@ -172,8 +177,9 @@ GtkWidget *make_buttons_box() {
     return GTK_WIDGET(buttons_box);
 }
 
-cocktail_t *get_cocktail_info() {
-    cocktail_t* cocktail = (cocktail_t *)malloc(sizeof(cocktail_t));
+cocktail_t *get_cocktail_info()
+{
+    cocktail_t *cocktail = (cocktail_t *)malloc(sizeof(cocktail_t));
 
     GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
     GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
@@ -193,19 +199,24 @@ cocktail_t *get_cocktail_info() {
     return cocktail;
 }
 
-void update_step_info(step_data_t *step_data) {
+void update_step_info(step_data_t *step_data)
+{
     GtkLabel *step_label = GTK_LABEL(gtk_builder_get_object(builder, "step_label"));
     GtkEntry *step_quantity = GTK_ENTRY(gtk_builder_get_object(builder, "step_quantity"));
     GtkEntry *step_description = GTK_ENTRY(gtk_builder_get_object(builder, "step_description"));
 
     char *str = malloc(100);
-    sprintf(str, "Step %d/%d  -  Bottle : %s", step_data->position+1, nb_step, step_data->bottle->name);
+    sprintf(str, "Step %d/%d  -  Bottle : %s", step_data->position + 1, nb_step, step_data->bottle->name);
+    g_print("avant set text\n");
     gtk_label_set_text(step_label, str);
 
-    if(step_data->step_completed == 0) {
+    if (step_data->step_completed == 0)
+    {
         gtk_entry_set_text(step_quantity, "0,00");
         gtk_entry_set_text(step_description, "");
-    } else {
+    }
+    else
+    {
         char *quantity = malloc(100);
         sprintf(quantity, "%.2f", step_data->step->quantity);
         gtk_entry_set_text(step_quantity, quantity);
@@ -213,7 +224,8 @@ void update_step_info(step_data_t *step_data) {
     }
 }
 
-void save_step_info(step_data_t *step_data) {
+void save_step_info(step_data_t *step_data)
+{
     GtkEntry *step_quantity = GTK_ENTRY(gtk_builder_get_object(builder, "step_quantity"));
     GtkEntry *step_description = GTK_ENTRY(gtk_builder_get_object(builder, "step_description"));
 
@@ -221,7 +233,8 @@ void save_step_info(step_data_t *step_data) {
     const char *description = gtk_entry_get_text(step_description);
     float quantity_float = atof(quantity);
 
-    if(step_data->step_completed == 0) {
+    if (step_data->step_completed == 0)
+    {
         step_data->step = (step_t *)malloc(sizeof(step_t));
     }
     step_data->step->quantity = quantity_float;
@@ -230,7 +243,8 @@ void save_step_info(step_data_t *step_data) {
     step_data->step_completed = 1;
 }
 
-void update_cocktail_list() {
+void update_cocktail_list()
+{
     int length;
     GtkBox *cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
     cocktail_t **cocktails = get_cocktails(conn, &length);
