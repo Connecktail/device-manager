@@ -22,12 +22,12 @@ GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkBox *bottles_selection_list;
-GtkWidget *stack ,*addCocktailStack;
-GtkWidget *pHomepage, *pAdministration, *pAddCocktail;
+GtkWidget *stack, *addCocktailStack;
+GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
 GtkWidget *pScanBottleModal, *pAddCocktailModal;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
-GtkWidget *pPairModuleModal;
 GtkWidget *pPairModuleModalLabel;
+GtkWidget *pValidatePairingButton;
 
 GtkCssProvider *css_provider;
 
@@ -56,14 +56,15 @@ void *display_screen(void *arg)
     pHomepage = GTK_WIDGET(gtk_builder_get_object(builder, "homepage_box"));
     pAdministration = GTK_WIDGET(gtk_builder_get_object(builder, "administration_box"));
     pAddCocktail = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_box"));
+    pPairModuleBox = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_box"));
     pScanBottleModal = GTK_WIDGET(gtk_builder_get_object(builder, "scan_bottle_modal"));
     pAddCocktailModal = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_modal"));
     pCocktailInfos = GTK_WIDGET(gtk_builder_get_object(builder, "cocktail_infos"));
     pBottlesSelection = GTK_WIDGET(gtk_builder_get_object(builder, "bottles_selection"));
     pStepInfos = GTK_WIDGET(gtk_builder_get_object(builder, "step_infos"));
-    pPairModuleModal = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal"));
 
     pPairModuleModalLabel = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal_label"));
+    pValidatePairingButton = GTK_WIDGET(gtk_builder_get_object(builder, "validate_pairing_button"));
 
     orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
     cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
@@ -89,7 +90,7 @@ void *display_screen(void *arg)
         }
     }
     bottles = get_bottles(conn, &nb_bottles);
-    bottle_data_list = (step_data_t**)malloc(sizeof(step_data_t*) * (nb_bottles));
+    bottle_data_list = (step_data_t **)malloc(sizeof(step_data_t *) * (nb_bottles));
     for (int i = 0; i < nb_bottles; i++)
     {
         gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
@@ -140,4 +141,3 @@ void close_app()
     gtk_main_quit();
     pthread_exit(NULL);
 }
-
