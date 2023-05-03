@@ -26,6 +26,17 @@ typedef struct
 } step_data_t;
 
 /**
+ * @brief Initialise the current order view
+ * @param order A pointer to the order object
+*/
+void init_current_order (order_t *order);
+
+/**
+ * @brief Update the current order view
+*/
+void update_current_order();
+
+/**
  * @brief Get a Widget object from an order object
  * @param cocktail A pointer to the order object
  * @return GtkWidget* A pointer to the widget

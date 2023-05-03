@@ -22,6 +22,26 @@
 
 #define PAIRING_WAITING_TIME 30
 
+typedef struct {
+    id_db_t id_order;
+    int percentage;
+    int step;
+    int total_step;
+    int bottle;
+    int total_bottle;
+    char *message;
+} status_t;
+
+typedef struct {
+   order_t *order;
+   int step;
+   int total_step;
+   int bottle;
+   int total_bottle;
+   step_t **current_cocktail_steps;
+} current_order_t;
+
+
 /**
  * @brief thread function to display the screen app and listen to screen interaction
  */

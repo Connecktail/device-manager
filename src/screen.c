@@ -16,6 +16,8 @@ int add_cocktail_step = 0;
 int nb_step = 0;
 cocktail_t *cocktail_added;
 
+current_order_t *current_order;
+
 GtkBuilder *builder;
 GdkScreen *gdk_screen;
 GtkWidget *window;
@@ -78,7 +80,12 @@ void *display_screen(void *arg)
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        if(orders[i]->status == 0) {
+            gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        }
+        if(orders[i]->status == 1) {
+            init_current_order(orders[i]);
+        }
     }
     cocktails = get_cocktails(conn, &length);
     for (int i = 0; i < length; i++)
