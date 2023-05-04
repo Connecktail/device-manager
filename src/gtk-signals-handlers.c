@@ -36,6 +36,7 @@ extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];
 extern sem_t send_barcode_semaphore;
 
+extern current_order_t *current_order;
 extern int add_cocktail_step, nb_step, nb_bottles;
 extern step_data_t **bottle_data_list;
 
@@ -281,6 +282,19 @@ void control_button_bottle_clicked(GtkButton *button, gpointer b_data)
 
         bottle_data_list[st->position]->position = st->position;
         bottle_data_list[st->position - data]->position = st->position - data;
+    }
+}
+
+void start_order_clicked(GtkButton *button)
+{
+    if(current_order == NULL) {
+        order_t *order = g_object_get_data(G_OBJECT(button), "order");
+
+        int new_status = 1;
+        update_order(conn, order, NULL, &new_status);
+
+        update_screen();
+        init_current_order(order);
     }
 }
 
