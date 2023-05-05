@@ -13,18 +13,6 @@ extern cocktail_t *cocktail_added;
 extern bottle_t **bottles;
 
 extern GtkBuilder *builder;
-extern GtkWidget *stack,  *addCocktailStack;
-extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleModal, *pPairModuleModalLabel;
-extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
-extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
-extern GtkBox *bottles_selection_list;
-#include <locale.h>
-
-extern PGconn *conn;
-extern cocktail_t *cocktail_added;
-extern bottle_t **bottles;
-
-extern GtkBuilder *builder;
 extern GtkWidget *stack, *addCocktailStack;
 extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton;
 extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
