@@ -32,6 +32,16 @@ void update_current_order() {
 
     if(current_order->bottle == current_order->total_bottle) {
         if(current_order->step == current_order->total_step) { 
+            msq_msg_t msg;
+            msg.mtype = UPDATE_ORDER_STATUS;
+            msg.message.order_status.id_order = *current_order->order->id;
+            msg.message.order_status.step = current_order->step;
+            msg.message.order_status.total_step = current_order->total_step;
+            msg.message.order_status.bottle = current_order->bottle;
+            msg.message.order_status.total_bottle = current_order->total_bottle;
+            strcpy(msg.message.order_status.message, "Order finished ! Come pick up your order.");
+                
+            send_message(msg);
             
             int new_status = 2;
             update_order(conn, current_order->order, NULL, &new_status);
@@ -94,8 +104,6 @@ void update_current_order() {
         } else {
             sprintf(msg.message.order_status.message, "Cocktail %s finished ! Now preparing %s", current_order->order->cocktails[current_order->step - 2]->name, current_order->order->cocktails[current_order->step - 1]->name);
         }
-    } else if (current_order->step == current_order->total_step && current_order->bottle == current_order->total_bottle) {
-        strcpy(msg.message.order_status.message, "Order finished ! Come pick up your order.");
     } else {
         sprintf(msg.message.order_status.message, "%s versé", current_order->current_cocktail_steps[current_order->bottle - 2]->bottle->name);
     }
