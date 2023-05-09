@@ -2,7 +2,67 @@
 
 extern PGconn *conn;
 extern GtkBuilder *builder;
+extern current_order_t *current_order;
 extern int nb_step;
+
+void init_current_order(order_t *order)
+{
+    current_order = (current_order_t *)malloc(sizeof(current_order_t));
+    current_order->order = get(conn, order->id);
+    current_order->total_step = current_order->order->nb_cocktails;
+    current_order->step = 0;
+    current_order->bottle = 0;
+    current_order->total_bottle = 0;
+
+    update_current_order();
+}
+
+void update_current_order()
+{
+    if (current_order->bottle == current_order->total_bottle)
+    {
+        int nb_steps;
+        current_order->current_cocktail_steps = get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[current_order->step]->id);
+
+        current_order->bottle = 1;
+        current_order->total_bottle = nb_steps;
+        current_order->step++;
+    }
+
+    GtkBox *current_order_box = GTK_BOX(gtk_builder_get_object(builder, "current-order"));
+
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(current_order_box));
+    for (iter = children; iter != NULL; iter = g_list_next(iter))
+    {
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    char *str = malloc(100);
+    sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->step, current_order->total_step, current_order->bottle, current_order->total_bottle);
+    GtkLabel *order_title = GTK_LABEL(gtk_label_new(str));
+
+    gtk_box_pack_start(current_order_box, GTK_WIDGET(order_title), TRUE, TRUE, 0);
+
+    sprintf(str, "Bottle: %s", current_order->current_cocktail_steps[current_order->bottle - 1]->bottle->name);
+    GtkLabel *step_bottle = GTK_LABEL(gtk_label_new(str));
+    gtk_box_pack_start(current_order_box, GTK_WIDGET(step_bottle), TRUE, TRUE, 0);
+
+    sprintf(str, "Quantity: %f", current_order->current_cocktail_steps[current_order->bottle - 1]->quantity);
+    GtkLabel *step_quantity = GTK_LABEL(gtk_label_new(str));
+    gtk_box_pack_start(current_order_box, GTK_WIDGET(step_quantity), TRUE, TRUE, 0);
+
+    sprintf(str, "Description:\n%s", current_order->current_cocktail_steps[current_order->bottle - 1]->description);
+    GtkLabel *step_description = GTK_LABEL(gtk_label_new(str));
+    gtk_box_pack_start(current_order_box, GTK_WIDGET(step_description), TRUE, TRUE, 0);
+
+    gtk_widget_set_halign(GTK_WIDGET(step_bottle), GTK_ALIGN_START);
+    gtk_widget_set_halign(GTK_WIDGET(step_quantity), GTK_ALIGN_START);
+    gtk_widget_set_halign(GTK_WIDGET(step_description), GTK_ALIGN_START);
+
+    gtk_widget_show_all(GTK_WIDGET(current_order_box));
+}
 
 GtkWidget *make_order_item(order_t *order)
 {

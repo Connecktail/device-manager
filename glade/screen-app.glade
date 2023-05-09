@@ -153,7 +153,13 @@
                         <property name="can-focus">False</property>
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
+
                         <child>
+                          <object class="GtkBox" id="current-order">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
                               <object class="GtkAccelLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -161,6 +167,8 @@
     Please select one in the left part</property>
                                 <property name="justify">center</property>
                               </object>
+                            </child>
+                          </object>
                         </child>
                       </object>
                       <packing>
