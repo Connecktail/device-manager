@@ -11,10 +11,19 @@ void init_current_order (order_t *order) {
 
     current_order = (current_order_t *)malloc(sizeof(current_order_t));
     current_order->order = get(conn, order->id);
-    current_order->total_step = current_order->order->nb_cocktails;
+    current_order->cocktail = 0;
+    current_order->total_cocktail = current_order->order->nb_cocktails;
     current_order->step = 0;
+    current_order->total_step = 0;
     current_order->bottle = 0;
     current_order->total_bottle = 0;
+
+    int nb_steps;
+
+    for(int i = 0; i < current_order->total_cocktail; i++) {
+        get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[i]->id);
+        current_order->total_step += nb_steps;
+    }
     
     update_current_order();
 }
@@ -56,18 +65,20 @@ void update_current_order() {
             return;
         } else {
             int nb_steps;
-            current_order->current_cocktail_steps = get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[current_order->step]->id);
+            current_order->current_cocktail_steps = get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[current_order->cocktail]->id);
 
             current_order->bottle = 1;
             current_order->total_bottle = nb_steps;
-            current_order->step++;
+            current_order->cocktail++;
         }
     } else {
         current_order->bottle++;
     }
+    
+    current_order->step++;
 
     char *str = malloc(100);
-    sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->step, current_order->total_step, current_order->bottle, current_order->total_bottle);
+    sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->cocktail, current_order->total_cocktail, current_order->bottle, current_order->total_bottle);
     GtkLabel *order_title = GTK_LABEL(gtk_label_new(str));
 
     gtk_box_pack_start(current_order_box, GTK_WIDGET(order_title), TRUE, TRUE, 0);
@@ -88,24 +99,27 @@ void update_current_order() {
     gtk_widget_set_halign(GTK_WIDGET(step_quantity), GTK_ALIGN_START);
     gtk_widget_set_halign(GTK_WIDGET(step_description), GTK_ALIGN_START);
 
+    gtk_widget_set_margin_start(GTK_WIDGET(current_order_box), 50);  
     gtk_widget_show_all(GTK_WIDGET(current_order_box));
 
     msq_msg_t msg;
     msg.mtype = UPDATE_ORDER_STATUS;
     msg.message.order_status.id_order = *current_order->order->id;
+    msg.message.order_status.cocktail = current_order->cocktail;
+    msg.message.order_status.total_cocktail = current_order->total_cocktail;
     msg.message.order_status.step = current_order->step;
     msg.message.order_status.total_step = current_order->total_step;
     msg.message.order_status.bottle = current_order->bottle;
     msg.message.order_status.total_bottle = current_order->total_bottle;
 
     if(current_order->bottle == 1) {
-        if(current_order->step == 1) {
-            sprintf(msg.message.order_status.message, "Order taken ! Now preparing %s", current_order->order->cocktails[current_order->step - 1]->name);
+        if(current_order->cocktail == 1) {
+            sprintf(msg.message.order_status.message, "Order taken ! Now preparing %s", current_order->order->cocktails[current_order->cocktail - 1]->name);
         } else {
-            sprintf(msg.message.order_status.message, "Cocktail %s finished ! Now preparing %s", current_order->order->cocktails[current_order->step - 2]->name, current_order->order->cocktails[current_order->step - 1]->name);
+            sprintf(msg.message.order_status.message, "Cocktail %s finished ! Now preparing %s", current_order->order->cocktails[current_order->cocktail - 2]->name, current_order->order->cocktails[current_order->cocktail - 1]->name);
         }
     } else {
-        sprintf(msg.message.order_status.message, "%s versé", current_order->current_cocktail_steps[current_order->bottle - 2]->bottle->name);
+        sprintf(msg.message.order_status.message, "The %s has just been poured !", current_order->current_cocktail_steps[current_order->bottle - 2]->bottle->name);
     }
           
     send_message(msg);
