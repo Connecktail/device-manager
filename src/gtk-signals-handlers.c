@@ -21,8 +21,6 @@ extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
 extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 extern GtkBox *bottles_selection_list, *modules_list;
 
-extern GtkBuilder *builder;
-
 extern pthread_cond_t scanner_condition;
 extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];

@@ -25,7 +25,11 @@ GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkBox *bottles_selection_list, *modules_list;
+<<<<<<< HEAD
 GtkWidget *stack, *add_cocktail_stack;
+=======
+GtkWidget *stack, *addCocktailStack;
+>>>>>>> e43356b (x[ADD] list modules)
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
 GtkWidget *pScanBottleModal, *pAddCocktailModal, *pAssociateModuleBottleBox;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
@@ -56,7 +60,11 @@ void *display_screen(void *arg)
 
     window = GET_GTK_WIDGET(builder, "window");
     stack = GET_GTK_WIDGET(builder, "principal_stack");
+<<<<<<< HEAD
     add_cocktail_stack = GET_GTK_WIDGET(builder, "add_cocktail_stack");
+=======
+    addCocktailStack = GET_GTK_WIDGET(builder, "add_cocktail_stack");
+>>>>>>> e43356b (x[ADD] list modules)
     pHomepage = GET_GTK_WIDGET(builder, "homepage_box");
     pAdministration = GET_GTK_WIDGET(builder, "administration_box");
     pAddCocktail = GET_GTK_WIDGET(builder, "add_cocktail_box");
@@ -71,6 +79,7 @@ void *display_screen(void *arg)
     pValidatePairingButton = GET_GTK_WIDGET(builder, "validate_pairing_button");
 
     pAssociateModuleBottleBox = GET_GTK_WIDGET(builder, "associate_module_bottle_box");
+<<<<<<< HEAD
 
     // lists
     orders_list = GET_GTK_BOX(builder, "orders-list");
@@ -78,7 +87,15 @@ void *display_screen(void *arg)
     bottles_list = GET_GTK_BOX(builder, "bottles-list");
     bottles_selection_list = GET_GTK_BOX(builder, "bottles-selection-list");
     modules_list = GET_GTK_BOX(builder, "modules-list");
+=======
+>>>>>>> e43356b (x[ADD] list modules)
 
+    // lists
+    orders_list = GET_GTK_BOX(builder, "orders-list");
+    cocktails_list = GET_GTK_BOX(builder, "cocktails-list");
+    bottles_list = GET_GTK_BOX(builder, "bottles-list");
+    bottles_selection_list = GET_GTK_BOX(builder, "bottles-selection-list");
+    modules_list = GET_GTK_BOX(builder, "modules-list");
 
     gdk_screen = gtk_widget_get_screen(window);
 
@@ -88,10 +105,12 @@ void *display_screen(void *arg)
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        if(orders[i]->status == 0) {
+        if (orders[i]->status == 0)
+        {
             gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
         }
-        if(orders[i]->status == 1) {
+        if (orders[i]->status == 1)
+        {
             init_current_order(orders[i]);
         }
     }
@@ -144,7 +163,8 @@ gboolean update_screen()
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        if(orders[i]->status == 0) {
+        if (orders[i]->status == 0)
+        {
             gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
         }
     }
