@@ -87,8 +87,6 @@ void update_current_order()
 
     current_order->step++;
 
-    current_order->step++;
-
     char *str = malloc(100);
     sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->cocktail, current_order->total_cocktail, current_order->bottle, current_order->total_bottle);
     GtkLabel *order_title = GTK_LABEL(gtk_label_new(str));
@@ -294,6 +292,7 @@ void update_step_info(step_data_t *step_data)
 
     char *str = malloc(100);
     sprintf(str, "Step %d/%d  -  Bottle : %s", step_data->position + 1, nb_step, step_data->bottle->name);
+    g_print("avant set text\n");
     gtk_label_set_text(step_label, str);
 
     if (step_data->step_completed == 0)

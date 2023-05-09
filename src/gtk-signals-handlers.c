@@ -325,30 +325,3 @@ void dissociate_module(GtkButton *button, gpointer b_data)
 {
     // TODO:
 }
-
-void continue_add_cocktail_modal()
-{
-    switch (add_cocktail_step)
-    {
-    case 1:
-        GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
-        GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
-        GtkEntry *pCocktailDesc = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_description"));
-        const char *cocktail_name = gtk_entry_get_text(pCocktailName);
-        const char *cocktail_price_txt = gtk_entry_get_text(pCocktailPrice);
-        const char *cocktail_desc = gtk_entry_get_text(pCocktailDesc);
-        if (strcmp(cocktail_price_txt, "") == 0)
-            cocktail_price_txt = "0";
-
-        float cocktail_price = atof(cocktail_price_txt);
-
-        strcpy(cocktail_added->name, cocktail_name);
-        strcpy(cocktail_added->description, cocktail_desc);
-        cocktail_added->price = cocktail_price;
-
-        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
-        break;
-    default:
-        break;
-    }
-}
