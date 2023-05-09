@@ -216,9 +216,20 @@ void check_bottle_clicked(GtkButton *button)
     {
         GtkBox *buttons_box = GTK_BOX(make_buttons_box());
 
+        GtkButton *up_button = GTK_BUTTON(gtk_button_new_with_label("▲"));
+        GtkButton *down_button = GTK_BUTTON(gtk_button_new_with_label("▼"));
+
+        gtk_widget_set_name(GTK_WIDGET(buttons_box), "buttons_box");
+
+        g_signal_connect_data(GTK_WIDGET(up_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)1, NULL, 0);
+        g_signal_connect_data(GTK_WIDGET(down_button), "clicked", G_CALLBACK(control_button_bottle_clicked), (gpointer)(uintptr_t)-1, NULL, 0);
+
+        gtk_box_pack_start(buttons_box, GTK_WIDGET(up_button), FALSE, FALSE, 0);
+        gtk_box_pack_start(buttons_box, GTK_WIDGET(down_button), FALSE, FALSE, 0);
         gtk_box_pack_start(parent, GTK_WIDGET(buttons_box), FALSE, FALSE, 0);
 
         gtk_box_reorder_child(parent, GTK_WIDGET(buttons_box), 0);
+
         gtk_box_reorder_child(bottles_selection_list, GTK_WIDGET(bottle_item), nb_step);
 
         step_data_t *current = bottle_data_list[st->position];
