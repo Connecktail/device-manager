@@ -12,10 +12,20 @@ void init_current_order(order_t *order)
 
     current_order = (current_order_t *)malloc(sizeof(current_order_t));
     current_order->order = get(conn, order->id);
-    current_order->total_step = current_order->order->nb_cocktails;
+    current_order->cocktail = 0;
+    current_order->total_cocktail = current_order->order->nb_cocktails;
     current_order->step = 0;
+    current_order->total_step = 0;
     current_order->bottle = 0;
     current_order->total_bottle = 0;
+
+    int nb_steps;
+
+    for (int i = 0; i < current_order->total_cocktail; i++)
+    {
+        get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[i]->id);
+        current_order->total_step += nb_steps;
+    }
 
     update_current_order();
 }
@@ -74,6 +84,8 @@ void update_current_order()
     {
         current_order->bottle++;
     }
+
+    current_order->step++;
 
     current_order->step++;
 
