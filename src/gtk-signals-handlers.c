@@ -270,7 +270,8 @@ void control_button_bottle_clicked(GtkButton *button, gpointer b_data)
 
 void start_order_clicked(GtkButton *button)
 {
-    if(current_order == NULL) {
+    if (current_order == NULL)
+    {
         order_t *order = g_object_get_data(G_OBJECT(button), "order");
 
         int new_status = 1;
