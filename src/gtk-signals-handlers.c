@@ -15,12 +15,14 @@ extern module_t **modules;
 extern int length;
 
 extern GtkBuilder *builder;
-extern GtkWidget *stack, *addCocktailStack;
+extern GtkWidget *stack, *add_cocktail_stack;
 extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton, *pAssociateModuleBottleBox;
 extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
 extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 extern GtkBox *bottles_selection_list, *modules_list;
 
+extern GtkBuilder *builder;
+extern GtkWidget *add_cocktail_stack;
 extern pthread_cond_t scanner_condition;
 extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];
@@ -28,15 +30,6 @@ extern sem_t send_barcode_semaphore;
 
 extern int add_cocktail_step, nb_step, nb_bottles;
 extern step_data_t **bottle_data_list;
-
-void go_to_admin()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
-}
-void go_to_homepage()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
-}
 
 void show_scan_bottle_modal()
 {
@@ -51,7 +44,7 @@ void hide_scan_bottle_modal()
 void show_add_cocktail_modal()
 {
     gtk_stack_set_visible_child(GTK_STACK(stack), pAddCocktail);
-    gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
+    gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
     add_cocktail_step = 1;
     GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
     GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
@@ -59,6 +52,8 @@ void show_add_cocktail_modal()
     gtk_entry_set_text(pCocktailName, "");
     gtk_entry_set_text(pCocktailPrice, "");
     gtk_entry_set_text(pCocktailDesc, "");
+    gtk_widget_show(pAddCocktailModal);
+    add_cocktail_step = 1;
 }
 
 void hide_add_cocktail_modal()
@@ -96,11 +91,11 @@ void back_add_cocktail()
         gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
         break;
     case 2:
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
         add_cocktail_step--;
         break;
     case 3:
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pBottlesSelection);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
         add_cocktail_step--;
         break;
     default:
@@ -141,13 +136,13 @@ void next_add_cocktail()
         }
         gtk_widget_show_all(GTK_WIDGET(bottles_selection_list));
 
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pBottlesSelection);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
         add_cocktail_step++;
         break;
     case 2:
         if (nb_step != 0)
         {
-            gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pStepInfos);
+            gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pStepInfos);
             update_step_info(bottle_data_list[0]);
             add_cocktail_step++;
         }
@@ -318,4 +313,31 @@ void associate_module(GtkButton *button, gpointer b_data)
 void dissociate_module(GtkButton *button, gpointer b_data)
 {
     // TODO:
+}
+
+void continue_add_cocktail_modal()
+{
+    switch (add_cocktail_step)
+    {
+    case 1:
+        GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
+        GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
+        GtkEntry *pCocktailDesc = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_description"));
+        const char *cocktail_name = gtk_entry_get_text(pCocktailName);
+        const char *cocktail_price_txt = gtk_entry_get_text(pCocktailPrice);
+        const char *cocktail_desc = gtk_entry_get_text(pCocktailDesc);
+        if (strcmp(cocktail_price_txt, "") == 0)
+            cocktail_price_txt = "0";
+
+        float cocktail_price = atof(cocktail_price_txt);
+
+        strcpy(cocktail_added->name, cocktail_name);
+        strcpy(cocktail_added->description, cocktail_desc);
+        cocktail_added->price = cocktail_price;
+
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
+        break;
+    default:
+        break;
+    }
 }

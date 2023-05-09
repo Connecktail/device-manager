@@ -23,7 +23,7 @@ GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkBox *bottles_selection_list, *modules_list;
-GtkWidget *stack, *addCocktailStack;
+GtkWidget *stack, *add_cocktail_stack;
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
 GtkWidget *pScanBottleModal, *pAddCocktailModal, *pAssociateModuleBottleBox;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
@@ -37,6 +37,7 @@ sem_t send_barcode_semaphore;
 void *display_screen(void *arg)
 {
     conn = db_connect(db_host, db_database, db_user, db_password);
+    cocktail_added = (cocktail_t *)malloc(sizeof(cocktail_t));
 
     sem_init(&send_barcode_semaphore, 0, 0);
 
@@ -53,7 +54,7 @@ void *display_screen(void *arg)
 
     window = GET_GTK_WIDGET(builder, "window");
     stack = GET_GTK_WIDGET(builder, "principal_stack");
-    addCocktailStack = GET_GTK_WIDGET(builder, "add_cocktail_stack");
+    add_cocktail_stack = GET_GTK_WIDGET(builder, "add_cocktail_stack");
     pHomepage = GET_GTK_WIDGET(builder, "homepage_box");
     pAdministration = GET_GTK_WIDGET(builder, "administration_box");
     pAddCocktail = GET_GTK_WIDGET(builder, "add_cocktail_box");
@@ -145,4 +146,13 @@ void close_app()
 {
     gtk_main_quit();
     pthread_exit(NULL);
+}
+
+void go_to_admin()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+}
+void go_to_homepage()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 }
