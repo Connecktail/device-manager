@@ -12,7 +12,7 @@ extern pthread_mutex_t mutex_condition;
 
 extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];
-int msqid;
+extern int msqid;
 
 void *handle_scanner(void *arg)
 {

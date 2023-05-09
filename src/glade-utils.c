@@ -7,6 +7,9 @@ extern int nb_step;
 
 void init_current_order(order_t *order)
 {
+    GtkBox *current_order_controls = GTK_BOX(gtk_builder_get_object(builder, "current-order-controls"));
+    gtk_widget_show_all(GTK_WIDGET(current_order_controls));
+
     current_order = (current_order_t *)malloc(sizeof(current_order_t));
     current_order->order = get(conn, order->id);
     current_order->total_step = current_order->order->nb_cocktails;
@@ -19,15 +22,6 @@ void init_current_order(order_t *order)
 
 void update_current_order()
 {
-    if (current_order->bottle == current_order->total_bottle)
-    {
-        int nb_steps;
-        current_order->current_cocktail_steps = get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[current_order->step]->id);
-
-        current_order->bottle = 1;
-        current_order->total_bottle = nb_steps;
-        current_order->step++;
-    }
 
     GtkBox *current_order_box = GTK_BOX(gtk_builder_get_object(builder, "current-order"));
 
@@ -39,8 +33,52 @@ void update_current_order()
     }
     g_list_free(children);
 
+    if (current_order->bottle == current_order->total_bottle)
+    {
+        if (current_order->step == current_order->total_step)
+        {
+            msq_msg_t msg;
+            msg.mtype = UPDATE_ORDER_STATUS;
+            msg.message.order_status.id_order = *current_order->order->id;
+            msg.message.order_status.step = current_order->step;
+            msg.message.order_status.total_step = current_order->total_step;
+            msg.message.order_status.bottle = current_order->bottle;
+            msg.message.order_status.total_bottle = current_order->total_bottle;
+            strcpy(msg.message.order_status.message, "Order finished ! Come pick up your order.");
+
+            send_message(msg);
+
+            int new_status = 2;
+            update_order(conn, current_order->order, NULL, &new_status);
+
+            GtkBox *current_order_controls = GTK_BOX(gtk_builder_get_object(builder, "current-order-controls"));
+            gtk_widget_hide(GTK_WIDGET(current_order_controls));
+
+            GtkAccelLabel *no_active_order = GTK_ACCEL_LABEL(gtk_accel_label_new("No active order"));
+            gtk_box_pack_start(current_order_box, GTK_WIDGET(no_active_order), TRUE, TRUE, 0);
+            gtk_widget_show(GTK_WIDGET(no_active_order));
+            current_order = NULL;
+            return;
+        }
+        else
+        {
+            int nb_steps;
+            current_order->current_cocktail_steps = get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[current_order->cocktail]->id);
+
+            current_order->bottle = 1;
+            current_order->total_bottle = nb_steps;
+            current_order->cocktail++;
+        }
+    }
+    else
+    {
+        current_order->bottle++;
+    }
+
+    current_order->step++;
+
     char *str = malloc(100);
-    sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->step, current_order->total_step, current_order->bottle, current_order->total_bottle);
+    sprintf(str, "Cocktail %d/%d, Step %d/%d", current_order->cocktail, current_order->total_cocktail, current_order->bottle, current_order->total_bottle);
     GtkLabel *order_title = GTK_LABEL(gtk_label_new(str));
 
     gtk_box_pack_start(current_order_box, GTK_WIDGET(order_title), TRUE, TRUE, 0);
@@ -61,7 +99,36 @@ void update_current_order()
     gtk_widget_set_halign(GTK_WIDGET(step_quantity), GTK_ALIGN_START);
     gtk_widget_set_halign(GTK_WIDGET(step_description), GTK_ALIGN_START);
 
+    gtk_widget_set_margin_start(GTK_WIDGET(current_order_box), 50);
     gtk_widget_show_all(GTK_WIDGET(current_order_box));
+
+    msq_msg_t msg;
+    msg.mtype = UPDATE_ORDER_STATUS;
+    msg.message.order_status.id_order = *current_order->order->id;
+    msg.message.order_status.cocktail = current_order->cocktail;
+    msg.message.order_status.total_cocktail = current_order->total_cocktail;
+    msg.message.order_status.step = current_order->step;
+    msg.message.order_status.total_step = current_order->total_step;
+    msg.message.order_status.bottle = current_order->bottle;
+    msg.message.order_status.total_bottle = current_order->total_bottle;
+
+    if (current_order->bottle == 1)
+    {
+        if (current_order->cocktail == 1)
+        {
+            sprintf(msg.message.order_status.message, "Order taken ! Now preparing %s", current_order->order->cocktails[current_order->cocktail - 1]->name);
+        }
+        else
+        {
+            sprintf(msg.message.order_status.message, "Cocktail %s finished ! Now preparing %s", current_order->order->cocktails[current_order->cocktail - 2]->name, current_order->order->cocktails[current_order->cocktail - 1]->name);
+        }
+    }
+    else
+    {
+        sprintf(msg.message.order_status.message, "The %s has just been poured !", current_order->current_cocktail_steps[current_order->bottle - 2]->bottle->name);
+    }
+
+    send_message(msg);
 }
 
 GtkWidget *make_order_item(order_t *order)
@@ -77,6 +144,10 @@ GtkWidget *make_order_item(order_t *order)
 
     gtk_widget_set_size_request(GTK_WIDGET(order_button), 50, -1);
     gtk_widget_set_halign(GTK_WIDGET(order_button), GTK_ALIGN_END);
+
+    g_object_set_data(G_OBJECT(order_button), "order", order);
+
+    g_signal_connect_data(order_button, "clicked", G_CALLBACK(start_order_clicked), NULL, NULL, 0);
 
     GtkStyleContext *context;
     context = gtk_widget_get_style_context(GTK_WIDGET(order_item));

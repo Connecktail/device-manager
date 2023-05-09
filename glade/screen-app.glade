@@ -125,7 +125,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="current-order-box">
                     <property name="width-request">400</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -176,6 +176,44 @@
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="current-order-controls">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="current-order-next-button">
+                            <property name="label" translatable="yes">Next</property>
+                            <property name="width-request">99</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-right">7</property>
+                            <signal name="clicked" handler="update_current_order" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="current-order-find-button">
+                            <property name="label" translatable="yes">Find</property>
+                            <property name="width-request">99</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-right">7</property>
+                            <!-- <signal name="clicked" handler="hide_scan_bottle_modal" swapped="no"/> -->
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
                     </child>
                     <style>
                       <class name="half-window"/>

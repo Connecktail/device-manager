@@ -38,6 +38,7 @@ sem_t send_barcode_semaphore;
 
 void *display_screen(void *arg)
 {
+    current_order = NULL;
     conn = db_connect(db_host, db_database, db_user, db_password);
 
     sem_init(&send_barcode_semaphore, 0, 0);
@@ -78,6 +79,7 @@ void *display_screen(void *arg)
     bottles_selection_list = GET_GTK_BOX(builder, "bottles-selection-list");
     modules_list = GET_GTK_BOX(builder, "modules-list");
 
+
     gdk_screen = gtk_widget_get_screen(window);
 
     GtkEntry *pCocktailName1 = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name1"));
@@ -117,6 +119,8 @@ void *display_screen(void *arg)
     gtk_builder_connect_signals(builder, NULL);
 
     gtk_widget_show_all(window);
+
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder, "current-order-controls")));
     gtk_main();
 
     return NULL;
@@ -140,7 +144,9 @@ gboolean update_screen()
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        if(orders[i]->status == 0) {
+            gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        }
     }
 
     gtk_widget_show_all(GTK_WIDGET(orders_list));
