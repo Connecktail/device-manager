@@ -37,7 +37,6 @@ sem_t send_barcode_semaphore;
 void *display_screen(void *arg)
 {
     conn = db_connect(db_host, db_database, db_user, db_password);
-    cocktail_added = (cocktail_t *)malloc(sizeof(cocktail_t));
 
     sem_init(&send_barcode_semaphore, 0, 0);
 
@@ -99,14 +98,7 @@ void *display_screen(void *arg)
     bottle_data_list = (step_data_t **)malloc(sizeof(step_data_t *) * (nb_bottles));
     for (int i = 0; i < nb_bottles; i++)
     {
-        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
-        // gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
-
-        bottle_data_list[i]->bottle = bottles[i];
-        // bottle_data_list[i]->checked = 0;
-        // bottle_data_list[i]->position = 0;
-
-        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item_addcocktail(&bottle_data_list[i])), TRUE, TRUE, 0);
+        gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
     }
 
     css_provider = gtk_css_provider_new();
