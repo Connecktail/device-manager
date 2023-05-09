@@ -658,7 +658,7 @@
                 <signal name="check-resize" handler="go_to_admin" swapped="no"/>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">Back</property>
+                    <property name="label" translatable="yes">Homepage</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>

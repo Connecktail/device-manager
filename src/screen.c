@@ -26,6 +26,7 @@ GtkWidget *window;
 GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkBox *bottles_selection_list, *modules_list;
 GtkWidget *stack, *add_cocktail_stack;
+
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
 GtkWidget *pScanBottleModal, *pAddCocktailModal, *pAssociateModuleBottleBox;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
@@ -78,6 +79,7 @@ void *display_screen(void *arg)
     bottles_list = GET_GTK_BOX(builder, "bottles-list");
     bottles_selection_list = GET_GTK_BOX(builder, "bottles-selection-list");
     modules_list = GET_GTK_BOX(builder, "modules-list");
+
 
     gdk_screen = gtk_widget_get_screen(window);
 

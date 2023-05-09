@@ -280,6 +280,7 @@ void start_order_clicked(GtkButton *button)
     }
 }
 
+
 void show_pair_module_modal()
 {
     gtk_stack_set_visible_child(GTK_STACK(stack), pPairModuleBox);

@@ -27,16 +27,15 @@
 
 #define PAIRING_WAITING_TIME 30
 
-typedef struct
-{
-    order_t *order;
-    int cocktail;
-    int total_cocktail;
-    int step;
-    int total_step;
-    int bottle;
-    int total_bottle;
-    step_t **current_cocktail_steps;
+typedef struct {
+   order_t *order;
+   int cocktail;
+   int total_cocktail;
+   int step;
+   int total_step;
+   int bottle;
+   int total_bottle;
+   step_t **current_cocktail_steps;
 } current_order_t;
 
 /**

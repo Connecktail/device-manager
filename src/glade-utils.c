@@ -39,6 +39,23 @@ void update_current_order()
     children = gtk_container_get_children(GTK_CONTAINER(current_order_box));
     for (iter = children; iter != NULL; iter = g_list_next(iter))
     {
+    for(int i = 0; i < current_order->total_cocktail; i++) {
+        get_cocktail_steps(conn, &nb_steps, current_order->order->cocktails[i]->id);
+        current_order->total_step += nb_steps;
+    }
+    
+    update_current_order();
+}
+
+void update_current_order()
+{
+
+    GtkBox *current_order_box = GTK_BOX(gtk_builder_get_object(builder, "current-order"));
+
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(current_order_box));
+    for (iter = children; iter != NULL; iter = g_list_next(iter))
+    {
         gtk_widget_destroy(GTK_WIDGET(iter->data));
     }
     g_list_free(children);
