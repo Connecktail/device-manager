@@ -210,3 +210,33 @@ void update_cocktail_list()
     }
     gtk_widget_show_all(GTK_WIDGET(cocktails_list));
 }
+
+GtkWidget *make_module_item(module_t *module)
+{
+    char *str = malloc(100);
+    sprintf(str, "Module - %s\n", module->mac_address);
+
+    GtkBox *module_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+    GtkLabel *module_label = GTK_LABEL(gtk_label_new(str));
+
+    char *label = is_associated(conn, module) ? "Dissociate" : "Associate";
+    GtkButton *module_button = GTK_BUTTON(gtk_button_new_with_label(label));
+    // if is_associated :
+    // g_signal_connect_data(module_button, "clicked", G_CALLBACK(dissociate_module), (gpointer)module->mac_address, NULL, 0);
+    // else
+    //  g_signal_connect_data(module_button, "clicked", G_CALLBACK(associate_module), (gpointer)(uintptr_t)1, NULL, 0);
+
+    gtk_label_set_xalign(module_label, 0);
+
+    gtk_widget_set_size_request(GTK_WIDGET(module_button), 50, -1);
+    gtk_widget_set_halign(GTK_WIDGET(module_button), GTK_ALIGN_END);
+
+    GtkStyleContext *context;
+    context = gtk_widget_get_style_context(GTK_WIDGET(module_item));
+    gtk_style_context_add_class(context, "module-item");
+
+    gtk_box_pack_start(module_item, GTK_WIDGET(module_label), TRUE, TRUE, 0);
+    gtk_box_pack_start(module_item, GTK_WIDGET(module_button), TRUE, TRUE, 0);
+
+    return GTK_WIDGET(module_item);
+}

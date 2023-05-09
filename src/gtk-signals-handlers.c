@@ -11,13 +11,15 @@
 extern PGconn *conn;
 extern cocktail_t *cocktail_added;
 extern bottle_t **bottles;
+extern module_t **modules;
+extern int length;
 
 extern GtkBuilder *builder;
 extern GtkWidget *stack, *addCocktailStack;
-extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton;
+extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton, *pAssociateModuleBottleBox;
 extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
 extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
-extern GtkBox *bottles_selection_list;
+extern GtkBox *bottles_selection_list, *modules_list;
 
 extern pthread_cond_t scanner_condition;
 extern float price;
@@ -290,4 +292,30 @@ void hide_pair_module_modal()
 void validate_pairing()
 {
     hide_pair_module_modal();
+}
+
+void show_associate_module_bottle()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAssociateModuleBottleBox);
+    modules = get_modules(conn, &length);
+    for (int i = 0; i < length; i++)
+    {
+        gtk_box_pack_start(modules_list, GTK_WIDGET(make_module_item(modules[i])), TRUE, TRUE, 0);
+    }
+    gtk_widget_show_all(gtk_widget_get_toplevel(modules_list));
+}
+
+void back_associate_module_bottle()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+}
+
+void associate_module(GtkButton *button, gpointer b_data)
+{
+    // TODO:
+}
+
+void dissociate_module(GtkButton *button, gpointer b_data)
+{
+    // TODO:
 }

@@ -20,6 +20,9 @@
 #define db_user "admin"
 #define db_password "admin"
 
+#define GET_GTK_WIDGET(builder, id) GTK_WIDGET(gtk_builder_get_object(builder, id))
+#define GET_GTK_BOX(builder, id) GTK_BOX(gtk_builder_get_object(builder, id))
+
 #define PAIRING_WAITING_TIME 30
 
 /**
