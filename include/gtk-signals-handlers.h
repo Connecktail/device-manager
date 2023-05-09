@@ -49,4 +49,10 @@ void check_bottle_clicked(GtkButton *button);
  */
 void control_button_bottle_clicked(GtkButton *button, gpointer b_data);
 
+/**
+ * @brief Function to handle check on the "Start order" buttons
+ * @param button  The button that triggered the event
+*/
+void start_order_clicked(GtkButton *button);
+
 #endif

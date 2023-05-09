@@ -13,6 +13,8 @@
 #include <sys/mman.h>
 #include <db-utils/dbutils.h>
 #include <shm-utils/shmutils.h>
+#include <msq-utils/msqutils.h>
+#include <msq-utils/msqtypes.h>
 #include "glade-utils.h"
 
 #define db_host "127.0.0.1"
@@ -21,6 +23,18 @@
 #define db_password "admin"
 
 #define PAIRING_WAITING_TIME 30
+
+typedef struct {
+   order_t *order;
+   int cocktail;
+   int total_cocktail;
+   int step;
+   int total_step;
+   int bottle;
+   int total_bottle;
+   step_t **current_cocktail_steps;
+} current_order_t;
+
 
 /**
  * @brief thread function to display the screen app and listen to screen interaction

@@ -1,7 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <msq-utils/message.h>
 
 #include "../include/scanner.h"
 #include "../include/screen.h"
@@ -14,9 +13,12 @@ float price;
 char barcode[MAX_LENGTH_BARCODE + 2];
 pthread_t th_scanner, th_screen;
 int shmid;
+int msqid;
 
 int main()
 {
+    init_message_queue();
+    
     struct sigaction newact;
     newact.sa_handler = signal_handler_linux;
     sigemptyset(&newact.sa_mask);

@@ -16,13 +16,15 @@ int add_cocktail_step = 0;
 int nb_step = 0;
 cocktail_t *cocktail_added;
 
+current_order_t *current_order;
+
 GtkBuilder *builder;
 GdkScreen *gdk_screen;
 GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
 GtkBox *bottles_selection_list;
-GtkWidget *stack, *addCocktailStack;
+GtkWidget *stack ,*addCocktailStack;
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
 GtkWidget *pScanBottleModal, *pAddCocktailModal;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
@@ -35,6 +37,7 @@ sem_t send_barcode_semaphore;
 
 void *display_screen(void *arg)
 {
+    current_order = NULL;
     conn = db_connect(db_host, db_database, db_user, db_password);
 
     sem_init(&send_barcode_semaphore, 0, 0);
@@ -71,6 +74,7 @@ void *display_screen(void *arg)
     bottles_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-list"));
     bottles_selection_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-selection-list"));
 
+
     gdk_screen = gtk_widget_get_screen(window);
 
     GtkEntry *pCocktailName1 = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name1"));
@@ -79,7 +83,12 @@ void *display_screen(void *arg)
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        if(orders[i]->status == 0) {
+            gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        }
+        if(orders[i]->status == 1) {
+            init_current_order(orders[i]);
+        }
     }
     cocktails = get_cocktails(conn, &length);
     for (int i = 0; i < length; i++)
@@ -105,6 +114,8 @@ void *display_screen(void *arg)
     gtk_builder_connect_signals(builder, NULL);
 
     gtk_widget_show_all(window);
+
+    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(builder, "current-order-controls")));
     gtk_main();
 
     return NULL;
@@ -128,7 +139,9 @@ gboolean update_screen()
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        if(orders[i]->status == 0) {
+            gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
+        }
     }
 
     gtk_widget_show_all(GTK_WIDGET(orders_list));
