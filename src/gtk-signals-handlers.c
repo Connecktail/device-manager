@@ -335,3 +335,20 @@ void continue_add_cocktail_modal()
         break;
     }
 }
+
+void check_bottle_clicked(GtkButton *button, gpointer data)
+{
+    step_data_t *st = data;
+    // int *id = data;
+    printf("clicked\n");
+
+    printf("%lld\n", *st->bottle->id);
+
+    // GtkButton *up_button = GTK_BUTTON(gtk_button_new_with_label("↑"));
+    // GtkButton *down_button = GTK_BUTTON(gtk_button_new_with_label("↓"));
+
+    // gtk_box_pack_start(buttons_box, GTK_WIDGET(up_button), FALSE, FALSE, 0);
+    // gtk_box_pack_start(buttons_box, GTK_WIDGET(down_button), FALSE, FALSE, 0);
+
+    // gtk_box_pack_start(order_item, GTK_WIDGET(buttons_box), FALSE, FALSE, 0);
+}
