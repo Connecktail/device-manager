@@ -22,7 +22,7 @@ extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 extern GtkBox *bottles_selection_list, *modules_list;
 
 extern GtkBuilder *builder;
-extern GtkWidget *add_cocktail_stack;
+
 extern pthread_cond_t scanner_condition;
 extern float price;
 extern char barcode[MAX_LENGTH_BARCODE + 2];
@@ -53,6 +53,7 @@ void show_add_cocktail_modal()
     gtk_entry_set_text(pCocktailPrice, "");
     gtk_entry_set_text(pCocktailDesc, "");
     gtk_widget_show(pAddCocktailModal);
+    gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
     add_cocktail_step = 1;
 }
 
@@ -94,14 +95,7 @@ void back_add_cocktail()
         gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
         add_cocktail_step--;
         break;
-    case 3:
-        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
-        add_cocktail_step--;
-        break;
     default:
-        add_cocktail_step--;
-        save_step_info(bottle_data_list[add_cocktail_step - 2]);
-        update_step_info(bottle_data_list[add_cocktail_step - 3]);
         break;
     }
 }

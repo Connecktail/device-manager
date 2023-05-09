@@ -99,6 +99,7 @@ void *display_screen(void *arg)
     bottle_data_list = (step_data_t **)malloc(sizeof(step_data_t *) * (nb_bottles));
     for (int i = 0; i < nb_bottles; i++)
     {
+        gtk_box_pack_start(bottles_selection_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
         gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
     }
 

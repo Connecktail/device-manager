@@ -151,7 +151,6 @@ void update_step_info(step_data_t *step_data)
 
     char *str = malloc(100);
     sprintf(str, "Step %d/%d  -  Bottle : %s", step_data->position + 1, nb_step, step_data->bottle->name);
-    g_print("avant set text\n");
     gtk_label_set_text(step_label, str);
 
     if (step_data->step_completed == 0)
