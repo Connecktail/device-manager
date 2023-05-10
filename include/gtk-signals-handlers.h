@@ -50,6 +50,44 @@ void check_bottle_clicked(GtkButton *button);
 void control_button_bottle_clicked(GtkButton *button, gpointer b_data);
 
 /**
+ * @brief Function to associate a module
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handle for the associate button
+ */
+void associate_module(GtkButton *button, gpointer b_data);
+
+/**
+ * @brief Function to dissociate a module
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handle for the dissociate button
+ */
+void dissociate_module(GtkButton *button, gpointer b_data);
+
+/**
+ * @brief Function to handle check on the "Start order" buttons
+ * @param button  The button that triggered the event
+ */
+void start_order_clicked(GtkButton *button);
+
+/**
+ * @brief Function to associate a module
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handle for the associate button
+ */
+void associate_module(GtkButton *button, gpointer b_data);
+
+/**
+ * @brief Function to dissociate a module
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function
+ * @note handle for the dissociate button
+ */
+void dissociate_module(GtkButton *button, gpointer b_data);
+
+/**
  * @brief Function to handle check on the "Start order" buttons
  * @param button  The button that triggered the event
 */

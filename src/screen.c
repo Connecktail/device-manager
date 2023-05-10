@@ -10,6 +10,7 @@ order_t **orders;
 cocktail_t **cocktails;
 bottle_t **bottles;
 step_data_t **bottle_data_list;
+module_t **modules;
 int length, nb_bottles;
 
 int add_cocktail_step = 0;
@@ -23,10 +24,11 @@ GdkScreen *gdk_screen;
 GtkWidget *window;
 
 GtkBox *orders_list, *cocktails_list, *bottles_list;
-GtkBox *bottles_selection_list;
-GtkWidget *stack ,*addCocktailStack;
+GtkBox *bottles_selection_list, *modules_list;
+GtkWidget *stack, *add_cocktail_stack;
+
 GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox;
-GtkWidget *pScanBottleModal, *pAddCocktailModal;
+GtkWidget *pScanBottleModal, *pAddCocktailModal, *pAssociateModuleBottleBox;
 GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
 GtkWidget *pPairModuleModalLabel;
 GtkWidget *pValidatePairingButton;
@@ -53,26 +55,30 @@ void *display_screen(void *arg)
     builder = gtk_builder_new();
     gtk_builder_add_from_file(builder, "./glade/screen-app.glade", NULL);
 
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-    stack = GTK_WIDGET(gtk_builder_get_object(builder, "principal_stack"));
-    addCocktailStack = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_stack"));
-    pHomepage = GTK_WIDGET(gtk_builder_get_object(builder, "homepage_box"));
-    pAdministration = GTK_WIDGET(gtk_builder_get_object(builder, "administration_box"));
-    pAddCocktail = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_box"));
-    pPairModuleBox = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_box"));
-    pScanBottleModal = GTK_WIDGET(gtk_builder_get_object(builder, "scan_bottle_modal"));
-    pAddCocktailModal = GTK_WIDGET(gtk_builder_get_object(builder, "add_cocktail_modal"));
-    pCocktailInfos = GTK_WIDGET(gtk_builder_get_object(builder, "cocktail_infos"));
-    pBottlesSelection = GTK_WIDGET(gtk_builder_get_object(builder, "bottles_selection"));
-    pStepInfos = GTK_WIDGET(gtk_builder_get_object(builder, "step_infos"));
+    window = GET_GTK_WIDGET(builder, "window");
+    stack = GET_GTK_WIDGET(builder, "principal_stack");
+    add_cocktail_stack = GET_GTK_WIDGET(builder, "add_cocktail_stack");
+    pHomepage = GET_GTK_WIDGET(builder, "homepage_box");
+    pAdministration = GET_GTK_WIDGET(builder, "administration_box");
+    pAddCocktail = GET_GTK_WIDGET(builder, "add_cocktail_box");
+    pPairModuleBox = GET_GTK_WIDGET(builder, "pair_module_box");
+    pScanBottleModal = GET_GTK_WIDGET(builder, "scan_bottle_modal");
+    pAddCocktailModal = GET_GTK_WIDGET(builder, "add_cocktail_modal");
+    pCocktailInfos = GET_GTK_WIDGET(builder, "cocktail_infos");
+    pBottlesSelection = GET_GTK_WIDGET(builder, "bottles_selection");
+    pStepInfos = GET_GTK_WIDGET(builder, "step_infos");
 
-    pPairModuleModalLabel = GTK_WIDGET(gtk_builder_get_object(builder, "pair_module_modal_label"));
-    pValidatePairingButton = GTK_WIDGET(gtk_builder_get_object(builder, "validate_pairing_button"));
+    pPairModuleModalLabel = GET_GTK_WIDGET(builder, "pair_module_modal_label");
+    pValidatePairingButton = GET_GTK_WIDGET(builder, "validate_pairing_button");
 
-    orders_list = GTK_BOX(gtk_builder_get_object(builder, "orders-list"));
-    cocktails_list = GTK_BOX(gtk_builder_get_object(builder, "cocktails-list"));
-    bottles_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-list"));
-    bottles_selection_list = GTK_BOX(gtk_builder_get_object(builder, "bottles-selection-list"));
+    pAssociateModuleBottleBox = GET_GTK_WIDGET(builder, "associate_module_bottle_box");
+
+    // lists
+    orders_list = GET_GTK_BOX(builder, "orders-list");
+    cocktails_list = GET_GTK_BOX(builder, "cocktails-list");
+    bottles_list = GET_GTK_BOX(builder, "bottles-list");
+    bottles_selection_list = GET_GTK_BOX(builder, "bottles-selection-list");
+    modules_list = GET_GTK_BOX(builder, "modules-list");
 
 
     gdk_screen = gtk_widget_get_screen(window);
@@ -83,10 +89,12 @@ void *display_screen(void *arg)
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        if(orders[i]->status == 0) {
+        if (orders[i]->status == 0)
+        {
             gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
         }
-        if(orders[i]->status == 1) {
+        if (orders[i]->status == 1)
+        {
             init_current_order(orders[i]);
         }
     }
@@ -139,7 +147,8 @@ gboolean update_screen()
     orders = get_orders(conn, &length);
     for (int i = 0; i < length; i++)
     {
-        if(orders[i]->status == 0) {
+        if (orders[i]->status == 0)
+        {
             gtk_box_pack_start(orders_list, GTK_WIDGET(make_order_item(orders[i])), TRUE, TRUE, 0);
         }
     }
@@ -153,4 +162,13 @@ void close_app()
 {
     gtk_main_quit();
     pthread_exit(NULL);
+}
+
+void go_to_admin()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+}
+void go_to_homepage()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
 }

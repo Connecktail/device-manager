@@ -22,6 +22,9 @@
 #define db_user "admin"
 #define db_password "admin"
 
+#define GET_GTK_WIDGET(builder, id) GTK_WIDGET(gtk_builder_get_object(builder, id))
+#define GET_GTK_BOX(builder, id) GTK_BOX(gtk_builder_get_object(builder, id))
+
 #define PAIRING_WAITING_TIME 30
 
 typedef struct {
@@ -34,7 +37,6 @@ typedef struct {
    int total_bottle;
    step_t **current_cocktail_steps;
 } current_order_t;
-
 
 /**
  * @brief thread function to display the screen app and listen to screen interaction

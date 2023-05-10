@@ -11,13 +11,15 @@
 extern PGconn *conn;
 extern cocktail_t *cocktail_added;
 extern bottle_t **bottles;
+extern module_t **modules;
+extern int length;
 
 extern GtkBuilder *builder;
-extern GtkWidget *stack, *addCocktailStack;
-extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton;
+extern GtkWidget *stack, *add_cocktail_stack;
+extern GtkWidget *pHomepage, *pAdministration, *pAddCocktail, *pPairModuleBox, *pPairModuleModalLabel, *pValidatePairingButton, *pAssociateModuleBottleBox;
 extern GtkWidget *pScanBottleModal, *pAddCocktailModal, *pScanBottleModal;
 extern GtkWidget *pCocktailInfos, *pBottlesSelection, *pStepInfos;
-extern GtkBox *bottles_selection_list;
+extern GtkBox *bottles_selection_list, *modules_list;
 
 extern pthread_cond_t scanner_condition;
 extern float price;
@@ -27,15 +29,6 @@ extern sem_t send_barcode_semaphore;
 extern current_order_t *current_order;
 extern int add_cocktail_step, nb_step, nb_bottles;
 extern step_data_t **bottle_data_list;
-
-void go_to_admin()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
-}
-void go_to_homepage()
-{
-    gtk_stack_set_visible_child(GTK_STACK(stack), pHomepage);
-}
 
 void show_scan_bottle_modal()
 {
@@ -50,7 +43,7 @@ void hide_scan_bottle_modal()
 void show_add_cocktail_modal()
 {
     gtk_stack_set_visible_child(GTK_STACK(stack), pAddCocktail);
-    gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
+    gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
     add_cocktail_step = 1;
     GtkEntry *pCocktailName = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_name"));
     GtkEntry *pCocktailPrice = GTK_ENTRY(gtk_builder_get_object(builder, "cocktail_price"));
@@ -95,11 +88,11 @@ void back_add_cocktail()
         gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
         break;
     case 2:
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pCocktailInfos);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pCocktailInfos);
         add_cocktail_step--;
         break;
     case 3:
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pBottlesSelection);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
         add_cocktail_step--;
         break;
     default:
@@ -140,13 +133,13 @@ void next_add_cocktail()
         }
         gtk_widget_show_all(GTK_WIDGET(bottles_selection_list));
 
-        gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pBottlesSelection);
+        gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pBottlesSelection);
         add_cocktail_step++;
         break;
     case 2:
         if (nb_step != 0)
         {
-            gtk_stack_set_visible_child(GTK_STACK(addCocktailStack), pStepInfos);
+            gtk_stack_set_visible_child(GTK_STACK(add_cocktail_stack), pStepInfos);
             update_step_info(bottle_data_list[0]);
             add_cocktail_step++;
         }
@@ -275,7 +268,8 @@ void control_button_bottle_clicked(GtkButton *button, gpointer b_data)
 
 void start_order_clicked(GtkButton *button)
 {
-    if(current_order == NULL) {
+    if (current_order == NULL)
+    {
         order_t *order = g_object_get_data(G_OBJECT(button), "order");
 
         int new_status = 1;
@@ -285,6 +279,7 @@ void start_order_clicked(GtkButton *button)
         init_current_order(order);
     }
 }
+
 
 void show_pair_module_modal()
 {
@@ -304,4 +299,30 @@ void hide_pair_module_modal()
 void validate_pairing()
 {
     hide_pair_module_modal();
+}
+
+void show_associate_module_bottle()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAssociateModuleBottleBox);
+    modules = get_modules(conn, &length);
+    for (int i = 0; i < length; i++)
+    {
+        gtk_box_pack_start(modules_list, GTK_WIDGET(make_module_item(modules[i])), TRUE, TRUE, 0);
+    }
+    gtk_widget_show_all(gtk_widget_get_toplevel(modules_list));
+}
+
+void back_associate_module_bottle()
+{
+    gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
+}
+
+void associate_module(GtkButton *button, gpointer b_data)
+{
+    // TODO:
+}
+
+void dissociate_module(GtkButton *button, gpointer b_data)
+{
+    // TODO:
 }
