@@ -24,9 +24,9 @@ int main()
     newact.sa_handler = signal_handler_linux;
     sigemptyset(&newact.sa_mask);
     newact.sa_flags = 0;
-    sigaction(SIGBUS, &newact, NULL);
     sigaction(SIGUSR1, &newact, NULL);
     sigaction(SIGPROF, &newact, NULL);
+    sigaction(SIGALRM, &newact, NULL);
 
     shmid = init_shared_memory();
     change_device_handler_pid(getpid());
