@@ -317,12 +317,15 @@ void back_associate_module_bottle()
     gtk_stack_set_visible_child(GTK_STACK(stack), pAdministration);
 }
 
-void associate_module(GtkButton *button, gpointer b_data)
+void associate_module_clicked(GtkButton *button, gpointer b_data)
 {
     // TODO:
 }
 
-void dissociate_module(GtkButton *button, gpointer b_data)
+void dissociate_module_clicked(GtkButton *button, gpointer b_data)
 {
-    // TODO:
+    module_t *module = (module_t *)malloc(sizeof(module_t));
+    strcpy(module->mac_address, (char *)b_data);
+    dissociate_module(conn, module);
+    gtk_button_set_label(button, "Associate");
 }

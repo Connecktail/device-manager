@@ -362,8 +362,9 @@ GtkWidget *make_module_item(module_t *module)
 
     char *label = is_associated(conn, module) ? "Dissociate" : "Associate";
     GtkButton *module_button = GTK_BUTTON(gtk_button_new_with_label(label));
-    // if is_associated :
-    // g_signal_connect_data(module_button, "clicked", G_CALLBACK(dissociate_module), (gpointer)module->mac_address, NULL, 0);
+    if (is_associated(conn, module)){
+        g_signal_connect_data(module_button, "clicked", G_CALLBACK(dissociate_module_clicked), module->mac_address, NULL, 0);
+    }
     // else
     //  g_signal_connect_data(module_button, "clicked", G_CALLBACK(associate_module), (gpointer)(uintptr_t)1, NULL, 0);
 
