@@ -6,7 +6,7 @@ BUILD=build
 SRC=src
 INCLUDE=include
 
-OBJECTS_FILES= main.o scanner.o screen.o glade-utils.o gtk-signals-handlers.o signal-handler.o
+OBJECTS_FILES= main.o scanner.o screen.o glade-utils.o gtk-signals-handlers.o signal-handler.o bottle-taken.o
 OBJS=$(addprefix $(OBJECTS)/, $(OBJECTS_FILES))
 
 all: $(BUILD)/main
