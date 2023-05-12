@@ -327,4 +327,5 @@ void dissociate_module_clicked(GtkButton *button, gpointer b_data)
     module_t *module = (module_t *)malloc(sizeof(module_t));
     strcpy(module->mac_address, (char *)b_data);
     dissociate_module(conn, module);
+    gtk_button_set_label(button, "Associate");
 }
