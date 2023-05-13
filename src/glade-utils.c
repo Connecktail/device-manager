@@ -394,7 +394,11 @@ GtkWidget *make_module_item(module_t *module)
             gtk_widget_set_size_request(GTK_WIDGET(choose_bottle_button), 50, -1);
             gtk_widget_set_halign(GTK_WIDGET(choose_bottle_button), GTK_ALIGN_END);
 
-            // g_signal_connect_data(choose_bottle_button, "clicked", G_CALLBACK(choose_bottle_to_associate), bottles[i]->id, NULL, 0);
+            association_data_t *data = (association_data_t *)malloc(sizeof(association_data_t));
+            data->module = module;
+            data->bottle = bottles[i];
+
+            g_signal_connect_data(choose_bottle_button, "clicked", G_CALLBACK(choose_bottle_to_associate), data, NULL, 0);
 
             gtk_box_pack_start(non_associated_bottle_box, GTK_WIDGET(non_associated_bottle_label), TRUE, TRUE, 0);
             gtk_box_pack_start(non_associated_bottle_box, GTK_WIDGET(choose_bottle_button), TRUE, TRUE, 0);
