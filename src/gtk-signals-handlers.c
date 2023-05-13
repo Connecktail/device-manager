@@ -330,6 +330,7 @@ void associate_module_clicked(GtkButton *button, gpointer b_data)
     toggle_button_data_t *data = (toggle_button_data_t *)b_data;
     GtkBox *non_associated_bottles_box = data->non_associated_bottles;
     GtkButton *toggle_button = data->toggle_button;
+    
     if (gtk_widget_get_visible(GTK_WIDGET(non_associated_bottles_box))){
         gtk_widget_set_visible(GTK_WIDGET(non_associated_bottles_box), FALSE);
         gtk_button_set_label(toggle_button, "Show bottles");
@@ -342,11 +343,17 @@ void associate_module_clicked(GtkButton *button, gpointer b_data)
 void dissociate_module_clicked(GtkButton *button, gpointer b_data)
 {
     module_t *module = (module_t *)malloc(sizeof(module_t));
+    
     strcpy(module->mac_address, (char *)b_data);
     dissociate_module(conn, module);
-    gtk_button_set_label(button, "Associate");
+    back_associate_module_bottle();
 }
 
 void choose_bottle_to_associate(GtkButton *button, gpointer b_data){
-    //TODO:
+    association_data_t *data = (association_data_t*)b_data;
+    module_t *module = data->module;
+    bottle_t *bottle = data->bottle;
+
+    associate_bottle(conn, bottle, module);
+    back_associate_module_bottle();
 }
