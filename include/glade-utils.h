@@ -25,6 +25,18 @@ typedef struct
    GtkBox *bottle_item;
 } step_data_t;
 
+typedef struct
+{
+   module_t *module;
+   bottle_t *bottle;
+} association_data_t;
+
+typedef struct
+{
+   GtkBox *non_associated_bottles;
+   GtkButton *toggle_button;
+} toggle_button_data_t;
+
 /**
  * @brief Initialise the current order view
  * @param order A pointer to the order object
