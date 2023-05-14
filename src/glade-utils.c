@@ -382,3 +382,11 @@ GtkWidget *make_module_item(module_t *module)
 
     return GTK_WIDGET(module_item);
 }
+
+ip_address_t *get_ip_adresse_of_module_from_current_order()
+{
+    // get the id of the bottle from the current order
+    long long int bottle_id = *(current_order->current_cocktail_steps[current_order->bottle - 1]->bottle->id);
+    bottle_t *bottle = get_bottle(conn, &bottle_id);
+    return bottle->module->ip_address;
+}
