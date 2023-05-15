@@ -13,6 +13,7 @@ extern cocktail_t *cocktail_added;
 extern bottle_t **bottles;
 extern module_t **modules;
 extern int length;
+extern int msqid;
 
 extern GtkBuilder *builder;
 extern GtkWidget *stack, *add_cocktail_stack;
@@ -328,4 +329,19 @@ void dissociate_module_clicked(GtkButton *button, gpointer b_data)
     strcpy(module->mac_address, (char *)b_data);
     dissociate_module(conn, module);
     gtk_button_set_label(button, "Associate");
+}
+
+void light_led()
+{
+    ip_address_t *ip_address = get_ip_adresse_of_module_from_current_order();
+    if (ip_address != NULL)
+    {
+        // send message led_message_t
+        msq_msg_t msg;
+        msg.mtype = ENABLE_LED_TYPE;
+        strcpy(msg.message.led.ip_address, ip_address);
+        send_message(msg);
+    }else{
+        g_printerr("No module associated to current order\n");
+    }
 }
