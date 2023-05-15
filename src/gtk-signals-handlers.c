@@ -373,3 +373,18 @@ void choose_bottle_to_associate(GtkButton *button, gpointer b_data){
     associate_bottle(conn, bottle, module);
     back_associate_module_bottle();
 }
+
+void light_led()
+{
+    ip_address_t *ip_address = get_ip_adresse_of_module_from_current_order();
+    if (ip_address != NULL)
+    {
+        // send message led_message_t
+        msq_msg_t msg;
+        msg.mtype = ENABLE_LED_TYPE;
+        strcpy(msg.message.led.ip_address, ip_address);
+        send_message(msg);
+    }else{
+        g_printerr("No module associated to current order\n");
+    }
+}

@@ -99,4 +99,10 @@ void light_led();
  */
 void choose_bottle_to_associate(GtkButton *button, gpointer b_data);
 
+/**
+ * @brief Function send a led_message_t to the message queue
+ * @note handler for the button "Find"
+*/
+void light_led();
+
 #endif
