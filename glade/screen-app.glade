@@ -422,14 +422,11 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">Associate module/bottle</property>
+                    <property name="label" translatable="yes">Modules list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="halign">end</property>
-                    <property name="margin-left">250</property>
-                    <property name="margin-right">10</property>
-                    <property name="margin-start">4</property>
                     <property name="margin-end">2</property>
                     <property name="margin-top">7</property>
                     <property name="margin-bottom">7</property>
@@ -438,7 +435,7 @@
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
