@@ -112,4 +112,11 @@ void update_cocktail_list();
  */
 GtkWidget *make_module_item(module_t *module);
 
+/**
+ * @brief Function to retrieve the ip address of the module from the current order
+ * @return ip_address_t* A pointer to the ip_address object
+ * @note will be used in order to send a message to the right module
+*/
+ip_address_t *get_ip_adresse_of_module_from_current_order();
+
 #endif
