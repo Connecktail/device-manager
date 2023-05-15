@@ -44,12 +44,6 @@ void *display_screen(void *arg)
 
     sem_init(&send_barcode_semaphore, 0, 0);
 
-    struct sigaction newact;
-    newact.sa_handler = signal_handler;
-    sigemptyset(&newact.sa_mask);
-    newact.sa_flags = 0;
-    sigaction(SIGUSR2, &newact, NULL);
-
     gtk_init(NULL, NULL);
 
     builder = gtk_builder_new();
@@ -129,12 +123,7 @@ void *display_screen(void *arg)
     return NULL;
 }
 
-void signal_handler()
-{
-    g_idle_add_full(G_PRIORITY_HIGH_IDLE, update_screen, NULL, NULL);
-}
-
-gboolean update_screen()
+gboolean update_orders_list()
 {
     GList *children, *iter;
     children = gtk_container_get_children(GTK_CONTAINER(orders_list));
@@ -154,6 +143,27 @@ gboolean update_screen()
     }
 
     gtk_widget_show_all(GTK_WIDGET(orders_list));
+
+    return G_SOURCE_REMOVE;
+}
+
+gboolean update_bottles_list()
+{
+    GList *children, *iter;
+    children = gtk_container_get_children(GTK_CONTAINER(bottles_list));
+    for (iter = children; iter != NULL; iter = g_list_next(iter))
+    {
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    bottles = get_bottles(conn, &length);
+    for (int i = 0; i < length; i++)
+    {
+        gtk_box_pack_start(bottles_list, GTK_WIDGET(make_bottle_item(bottles[i])), TRUE, TRUE, 0);
+    }
+
+    gtk_widget_show_all(GTK_WIDGET(bottles_list));
 
     return G_SOURCE_REMOVE;
 }

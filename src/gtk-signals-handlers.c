@@ -276,7 +276,7 @@ void start_order_clicked(GtkButton *button)
         int new_status = 1;
         update_order(conn, order, NULL, &new_status);
 
-        update_screen();
+        update_orders_list();
         init_current_order(order);
     }
 }

@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <gtk-3.0/gtk/gtk.h>
 #include <pthread.h>
+#include "../include/screen.h"
 
 extern pthread_cond_t bottle_taken_condition;
 extern GtkWidget *pPairModuleModalLabel;
@@ -17,6 +18,16 @@ void signal_handler_linux(int signum)
         // The module is paired, modify the label of the pari_module_modal
         gtk_label_set_text(GTK_LABEL(pPairModuleModalLabel), "New module found");
         module_found = 1;
+    }
+    else if(signum == SIGUSR2)
+    {
+        // New order has just arrived, update the orders list
+        g_idle_add_full(G_PRIORITY_HIGH_IDLE, update_orders_list, NULL, NULL);
+    }
+    else if (signum == SIGPOLL)
+    {
+        // New bottle scanned, update the bottles list
+        g_idle_add_full(G_PRIORITY_HIGH_IDLE, update_bottles_list, NULL, NULL);
     }
     else if (signum == SIGALRM && !module_found)
     {
