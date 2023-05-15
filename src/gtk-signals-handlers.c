@@ -304,13 +304,21 @@ void validate_pairing()
 
 void show_associate_module_bottle()
 {
+    // Remove all modules from list
+    GList *children = gtk_container_get_children(GTK_CONTAINER(modules_list));
+    GList *iter;
+    for (iter = children; iter != NULL; iter = g_list_next(iter)) {
+        gtk_container_remove(GTK_CONTAINER(modules_list), GTK_WIDGET(iter->data));
+    }
+    g_list_free(children);
+
+    // Add modules to list
     gtk_stack_set_visible_child(GTK_STACK(stack), pAssociateModuleBottleBox);
     modules = get_modules(conn, &length);
     for (int i = 0; i < length; i++)
     {
         gtk_box_pack_start(modules_list, GTK_WIDGET(make_module_item(modules[i])), TRUE, TRUE, 0);
     }
-    gtk_widget_show_all(gtk_widget_get_toplevel(modules_list));
 }
 
 void back_associate_module_bottle()
@@ -320,7 +328,16 @@ void back_associate_module_bottle()
 
 void associate_module_clicked(GtkButton *button, gpointer b_data)
 {
-    // TODO:
+    toggle_button_data_t *data = (toggle_button_data_t *)b_data;
+    GtkBox *non_associated_bottles_box = data->non_associated_bottles;
+    GtkButton *toggle_button = data->toggle_button;
+    if (gtk_widget_get_visible(GTK_WIDGET(non_associated_bottles_box))){
+        gtk_widget_set_visible(GTK_WIDGET(non_associated_bottles_box), FALSE);
+        gtk_button_set_label(toggle_button, "Show bottles");
+    }else{
+        gtk_widget_set_visible(GTK_WIDGET(non_associated_bottles_box), TRUE);
+        gtk_button_set_label(toggle_button, "Hide bottles");
+    }
 }
 
 void dissociate_module_clicked(GtkButton *button, gpointer b_data)
@@ -344,4 +361,8 @@ void light_led()
     }else{
         g_printerr("No module associated to current order\n");
     }
+}
+
+void choose_bottle_to_associate(GtkButton *button, gpointer b_data){
+    //TODO:
 }

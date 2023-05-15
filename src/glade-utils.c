@@ -357,28 +357,60 @@ GtkWidget *make_module_item(module_t *module)
     char *str = malloc(100);
     sprintf(str, "Module - %s\n", module->mac_address);
 
-    GtkBox *module_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
-    GtkLabel *module_label = GTK_LABEL(gtk_label_new(str));
+    GtkBox *module_item = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
+    GtkBox *header_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+    GtkBox *non_associated_bottles_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));;
 
-    char *label = is_associated(conn, module) ? "Dissociate" : "Associate";
-    GtkButton *module_button = GTK_BUTTON(gtk_button_new_with_label(label));
-    if (is_associated(conn, module)){
-        g_signal_connect_data(module_button, "clicked", G_CALLBACK(dissociate_module_clicked), module->mac_address, NULL, 0);
-    }
-    // else
-    //  g_signal_connect_data(module_button, "clicked", G_CALLBACK(associate_module), (gpointer)(uintptr_t)1, NULL, 0);
-
-    gtk_label_set_xalign(module_label, 0);
-
-    gtk_widget_set_size_request(GTK_WIDGET(module_button), 50, -1);
-    gtk_widget_set_halign(GTK_WIDGET(module_button), GTK_ALIGN_END);
-
+    // Define header
+    GtkLabel *header_label = GTK_LABEL(gtk_label_new(str));
+    char *label = is_associated(conn, module) ? "Dissociate" : "Hide bottles";
+    GtkButton *header_button = GTK_BUTTON(gtk_button_new_with_label(label));
+    gtk_label_set_xalign(header_label, 0);
+    gtk_widget_set_size_request(GTK_WIDGET(header_button), 50, -1);
+    gtk_widget_set_halign(GTK_WIDGET(header_button), GTK_ALIGN_END);
     GtkStyleContext *context;
     context = gtk_widget_get_style_context(GTK_WIDGET(module_item));
     gtk_style_context_add_class(context, "module-item");
+    gtk_box_pack_start(header_box, GTK_WIDGET(header_label), TRUE, TRUE, 0);
+    gtk_box_pack_start(header_box, GTK_WIDGET(header_button), TRUE, TRUE, 0);
 
-    gtk_box_pack_start(module_item, GTK_WIDGET(module_label), TRUE, TRUE, 0);
-    gtk_box_pack_start(module_item, GTK_WIDGET(module_button), TRUE, TRUE, 0);
+    gtk_box_pack_start(module_item, GTK_WIDGET(header_box), TRUE, TRUE, 0);
+
+    int is_module_associated = is_associated(conn, module);
+
+    if (is_module_associated){
+        g_signal_connect_data(header_button, "clicked", G_CALLBACK(dissociate_module_clicked), module->mac_address, NULL, 0);
+    }else{
+        int nb_bottles;
+        bottle_t **bottles = get_non_associated_bottles(conn, &nb_bottles);
+        for(int i = 0; i < nb_bottles; i++){
+            char *label = (char *)malloc(100 * sizeof(char));
+            sprintf(label, "Bottle - %s", bottles[i]->name);
+            GtkBox *non_associated_bottle_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+            GtkLabel *non_associated_bottle_label = GTK_LABEL(gtk_label_new(label));
+            GtkButton *choose_bottle_button = GTK_BUTTON(gtk_button_new_with_label("Choose"));
+
+            gtk_label_set_xalign(non_associated_bottle_label, 0);
+            gtk_widget_set_size_request(GTK_WIDGET(choose_bottle_button), 50, -1);
+            gtk_widget_set_halign(GTK_WIDGET(choose_bottle_button), GTK_ALIGN_END);
+
+            // g_signal_connect_data(choose_bottle_button, "clicked", G_CALLBACK(choose_bottle_to_associate), bottles[i]->id, NULL, 0);
+
+            gtk_box_pack_start(non_associated_bottle_box, GTK_WIDGET(non_associated_bottle_label), TRUE, TRUE, 0);
+            gtk_box_pack_start(non_associated_bottle_box, GTK_WIDGET(choose_bottle_button), TRUE, TRUE, 0);
+
+            gtk_box_pack_start(non_associated_bottles_box, GTK_WIDGET(non_associated_bottle_box), TRUE, TRUE, 0);
+        }
+
+        toggle_button_data_t *data = (toggle_button_data_t *)malloc(sizeof(toggle_button_data_t));
+        data->non_associated_bottles = non_associated_bottles_box;
+        data->toggle_button = header_button;
+
+        g_signal_connect_data(header_button, "clicked", G_CALLBACK(associate_module_clicked), data, NULL, 0);
+        gtk_box_pack_start(module_item, GTK_WIDGET(non_associated_bottles_box), TRUE, TRUE, 0);
+    }
+
+    gtk_widget_show_all(GTK_WIDGET(module_item));
 
     return GTK_WIDGET(module_item);
 }

@@ -64,10 +64,10 @@ void associate_module(GtkButton *button, gpointer b_data);
 void start_order_clicked(GtkButton *button);
 
 /**
- * @brief Function to associate a module
+ * @brief Function to display the non associated bottles
  * @param button  The button that triggered the event
  * @param b_data The data passed to the function
- * @note handle for the associate button
+ * @note handle for the associate button, acts as a toggle button
  */
 void associate_module_clicked(GtkButton *button, gpointer b_data);
 
@@ -82,7 +82,7 @@ void dissociate_module_clicked(GtkButton *button, gpointer b_data);
 /**
  * @brief Function to handle check on the "Start order" buttons
  * @param button  The button that triggered the event
-*/
+ */
 void start_order_clicked(GtkButton *button);
 
 /**
@@ -90,5 +90,13 @@ void start_order_clicked(GtkButton *button);
  * @note handler for the button "Find"
 */
 void light_led();
+
+/**
+ * @brief Function to associate a bottle with a module
+ * @param button  The button that triggered the event
+ * @param b_data The data passed to the function : struct containing the bottle and the module
+ * @note handle for the choose button
+ */
+void choose_bottle_to_associate(GtkButton *button, gpointer b_data);
 
 #endif
