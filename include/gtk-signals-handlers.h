@@ -93,4 +93,10 @@ void start_order_clicked(GtkButton *button);
  */
 void choose_bottle_to_associate(GtkButton *button, gpointer b_data);
 
+/**
+ * @brief Function to play a sound on the module of the current order
+ * @note handler for the button "Play sound"
+*/
+void play_sound();
+
 #endif

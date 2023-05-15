@@ -357,3 +357,15 @@ void choose_bottle_to_associate(GtkButton *button, gpointer b_data){
     associate_bottle(conn, bottle, module);
     back_associate_module_bottle();
 }
+
+void play_sound()
+{
+    ip_address_t *ip_address = get_ip_adresse_of_module_from_current_order();
+    if (ip_address != NULL)
+    {
+        msq_msg_t msg;
+        msg.mtype = ENABLE_BUZZER_TYPE;
+        strcpy(msg.message.buzzer.ip_address, ip_address);
+        send_message(msg);
+    }
+}
