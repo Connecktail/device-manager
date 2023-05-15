@@ -86,6 +86,12 @@ void dissociate_module_clicked(GtkButton *button, gpointer b_data);
 void start_order_clicked(GtkButton *button);
 
 /**
+ * @brief Function send a led_message_t to the message queue
+ * @note handler for the button "Find"
+*/
+void light_led();
+
+/**
  * @brief Function to associate a bottle with a module
  * @param button  The button that triggered the event
  * @param b_data The data passed to the function : struct containing the bottle and the module

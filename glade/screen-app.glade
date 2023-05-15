@@ -193,6 +193,7 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
                             <property name="margin-right">7</property>
+                            <signal name="clicked" handler="light_led" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
