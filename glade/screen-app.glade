@@ -153,7 +153,6 @@
                         <property name="can-focus">False</property>
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
-
                         <child>
                           <object class="GtkBox" id="current-order">
                             <property name="visible">True</property>
@@ -167,6 +166,11 @@
     Please select one in the left part</property>
                                 <property name="justify">center</property>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -181,6 +185,21 @@
                       <object class="GtkBox" id="current-order-controls">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="current-order-find-button">
+                            <property name="label" translatable="yes">Find</property>
+                            <property name="width-request">99</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="margin-right">7</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="GtkButton" id="current-order-next-button">
                             <property name="label" translatable="yes">Next</property>
@@ -197,23 +216,12 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkButton" id="current-order-find-button">
-                            <property name="label" translatable="yes">Find</property>
-                            <property name="width-request">99</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="margin-right">7</property>
-                            <!-- <signal name="clicked" handler="hide_scan_bottle_modal" swapped="no"/> -->
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                     <style>
                       <class name="half-window"/>
@@ -413,14 +421,11 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">Associate module/bottle</property>
+                    <property name="label" translatable="yes">Modules list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="halign">end</property>
-                    <property name="margin-left">250</property>
-                    <property name="margin-right">10</property>
-                    <property name="margin-start">4</property>
                     <property name="margin-end">2</property>
                     <property name="margin-top">7</property>
                     <property name="margin-bottom">7</property>
@@ -429,7 +434,7 @@
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
