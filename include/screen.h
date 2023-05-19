@@ -49,10 +49,16 @@ void *display_screen(void *arg);
 void signal_handler();
 
 /**
- * @brief update the screen
+ * @brief update the orders list
  * @note this function is called by the signal handler
  */
-gboolean update_screen();
+gboolean update_orders_list();
+
+/**
+ * @brief update the bottles list
+ * @note this function is called by the signal handler
+ */
+gboolean update_bottles_list();
 
 /**
  * @brief close the app
