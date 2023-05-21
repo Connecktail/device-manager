@@ -44,11 +44,6 @@ typedef struct {
 void *display_screen(void *arg);
 
 /**
- * @brief signal handler to update the screen
- */
-void signal_handler();
-
-/**
  * @brief update the orders list
  * @note this function is called by the signal handler
  */
