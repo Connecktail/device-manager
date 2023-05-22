@@ -362,6 +362,16 @@ GtkWidget *make_module_item(module_t *module)
     GtkBox *non_associated_bottles_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));;
 
     // Define header
+    char *battery_level = malloc(100);
+    sprintf(battery_level, "Battery : %d%%", module->battery_level);
+    GtkLabel *battery_level_label = GTK_LABEL(gtk_label_new(battery_level));
+    GtkStyleContext *battery_level_context = gtk_widget_get_style_context(battery_level_label);
+    if (module->battery_level < 25){
+        GdkRGBA color;
+        gdk_rgba_parse(&color, "red");
+        gtk_widget_override_color(battery_level_label, GTK_STATE_FLAG_NORMAL, &color);
+    }
+
     GtkLabel *header_label = GTK_LABEL(gtk_label_new(str));
     char *label = is_associated(conn, module) ? "Dissociate" : "Hide bottles";
     GtkButton *header_button = GTK_BUTTON(gtk_button_new_with_label(label));
@@ -372,6 +382,7 @@ GtkWidget *make_module_item(module_t *module)
     context = gtk_widget_get_style_context(GTK_WIDGET(module_item));
     gtk_style_context_add_class(context, "module-item");
     gtk_box_pack_start(header_box, GTK_WIDGET(header_label), TRUE, TRUE, 0);
+    gtk_box_pack_start(header_box, GTK_WIDGET(battery_level_label), TRUE, TRUE, 0);
     gtk_box_pack_start(header_box, GTK_WIDGET(header_button), TRUE, TRUE, 0);
 
     gtk_box_pack_start(module_item, GTK_WIDGET(header_box), TRUE, TRUE, 0);
