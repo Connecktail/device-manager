@@ -121,6 +121,7 @@ void next_add_cocktail()
         }
         g_list_free(children);
 
+        bottles = get_bottles(conn, &nb_bottles);
         bottle_data_list = (step_data_t **)malloc(sizeof(step_data_t *) * (nb_bottles));
         for (int i = 0; i < nb_bottles; i++)
         {
